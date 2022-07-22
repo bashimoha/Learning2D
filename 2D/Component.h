@@ -36,12 +36,14 @@ struct CCollision {
 
 struct CInput {
 	CInput() {}
-	bool right{ true };
-	bool left{ true };
-	bool up{ true };
-	bool down{ true };
+	bool right{ false };
+	bool left{ false };
+	bool up{ false };
+	bool down{ false };
 	bool fire{ false };
+
 };
+
 struct CScore
 {
 	int score{};

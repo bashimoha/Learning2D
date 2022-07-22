@@ -68,33 +68,15 @@ void Game::setPause(bool pause)
 
 void Game::sysMovement()
 {
-	//move the player
-	vec2 move{ };
-	if (mPlayer->cInput->right)
+	for(auto e: mEntities.getEntities())
 	{
-		move.x += mPlayerConfig.Speed;
-		mPlayer->cInput->right = false;
-	}
-	if (mPlayer->cInput->left)
-	{
-		move.x -= mPlayerConfig.Speed;
-		mPlayer->cInput->left = false;
-	}
-	if (mPlayer->cInput->up)
-	{
-		move.y -= mPlayerConfig.Speed;
-		mPlayer->cInput->up = false;
-	}
-	if (mPlayer->cInput->down)
-	{
-		move.y += mPlayerConfig.Speed;
-		mPlayer->cInput->down = false;
-	}
-	if (move.x != 0 || move.y != 0) {
-		mPlayer->cTransform->velocity += move;
-		mPlayer->cTransform->position += mPlayer->cTransform->velocity;
+		if (e->Tag() == "player")
+		{
+			movePlayer(e);
+		}
 	}
 }
+
 
 void Game::sysInput()
 {
@@ -105,23 +87,23 @@ void Game::sysInput()
 		{
 			mRunning = false;
 		}
-		//key down
-		if (event.type == sf::Event::KeyPressed)
+		//key down || key up
+		if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
 		{
 			switch (event.key.code)
 			{
-				//wasd
+				//toggle the pressed state
 				case sf::Keyboard::W:
-						mPlayer->cInput->up = true;
-						break;
+					mPlayer->cInput->up = !(mPlayer->cInput->up);
+					break;
 				case sf::Keyboard::S:
-						mPlayer->cInput->down = true;
-						break;
+					mPlayer->cInput->down = !(mPlayer->cInput->down);
+					break;
 				case sf::Keyboard::A:
-						mPlayer->cInput->left = true;
+					mPlayer->cInput->left = !(mPlayer->cInput->left);
 						break;
 				case sf::Keyboard::D:
-						mPlayer->cInput->right = true;
+					mPlayer->cInput->right = !(mPlayer->cInput->right);
 						break;
 			}
 		}
@@ -144,6 +126,27 @@ void Game::sysRender()
 
 void Game::sysCollision()
 {
+	//make sure all the entities don't go out of bounds
+	for (auto e : mEntities.getEntities())
+	{
+		if (e->cTransform->position.x < 0)
+		{
+			e->cTransform->position.x = 0;
+		}
+		if (e->cTransform->position.y < 0)
+		{
+			e->cTransform->position.y = 0;
+		}
+		if (e->cTransform->position.x > mWindow.getSize().x)
+		{
+			e->cTransform->position.x = mWindow.getSize().x - e->cShape->shape.getRadius();
+		}
+		if (e->cTransform->position.y > mWindow.getSize().y)
+		{
+			e->cTransform->position.y = mWindow.getSize().y;
+
+		}
+	}
 }
 
 void Game::sysSpawnEnemy()
@@ -191,3 +194,30 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const vec2& mousePos)
 void Game::spawnPowerup(std::shared_ptr<Entity> player)
 {
 }
+
+void Game::movePlayer(std::shared_ptr<Entity> player)
+{
+	//update player velocity based on input(wasd)
+	auto speed = mPlayerConfig.Speed;
+	vec2 player_velocity = {0, 0};
+
+	if (mPlayer->cInput->up)
+	{
+		player_velocity.y = -speed;
+	}
+	if (mPlayer->cInput->down)
+	{
+		player_velocity.y = speed;
+	}
+	if (mPlayer->cInput->left)
+	{
+		player_velocity.x = -speed;
+	}
+	if (mPlayer->cInput->right)
+	{
+		player_velocity.x = speed;
+	}
+	mPlayer->cTransform->velocity = player_velocity;
+	mPlayer->cTransform->position += mPlayer->cTransform->velocity;
+}
+ 
