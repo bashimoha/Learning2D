@@ -17,8 +17,6 @@ struct PlayerConfig {
 	int CollisionRadius{0};
 	float Speed{0.f};
 	sf::Color FillColor{};
-	/*int fillR{}, fillG{}, fillB{};
-	int outlineR{}, outlineG{}, outlineB{};*/
 	sf::Color OutlineColor{};
 	int OutlineThickness{0};
 	int ShapeVertices{0};
@@ -90,4 +88,5 @@ private:
 	void spawnSmallerEnemy(std::shared_ptr<Entity> enemy);
 	void spawnBullet(std::shared_ptr<Entity> entity,const vec2& mousePos);
 	void spawnPowerup(std::shared_ptr<Entity> player);
+	void movePlayer(std::shared_ptr<Entity> enemy);
 };
