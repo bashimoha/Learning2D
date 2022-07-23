@@ -16,6 +16,7 @@ void Game::run()
 		sysSpawnEnemy();
 		sysCollision();
 		sysInput();
+		sysHealth();
 		sysMovement();
 		sysRender();
 		mFrame++;
@@ -53,12 +54,20 @@ void Game::Init(const std::string& config)
 		>> mPlayerConfig.OutlineThickness
 		>> mPlayerConfig.ShapeVertices;
 	mPlayerConfig.OutlineColor = sf::Color(r, g, b);
-	//see if read the correct info from the config file for player by printing it out
-	
 	spawnPlayer();
-	
+
+	//read bullet info
+	file >> temp >> mBulletConfig.ShapeRadius
+		>> mBulletConfig.CollisionRadius
+		>> mBulletConfig.Speed
+		>> r >> g >> b;
+	mBulletConfig.FillColor = sf::Color(r, g, b);
+	file >> r >> g >> b
+		>> mBulletConfig.OutlineThickness
+		>> mBulletConfig.ShapeVertices
+		>> mBulletConfig.Health;
+	mBulletConfig.OutlineColor = sf::Color(r, g, b);
 	file.close();
-	
 }
 
 void Game::setPause(bool pause)
@@ -72,7 +81,12 @@ void Game::sysMovement()
 	{
 		if (e->Tag() == "player")
 		{
-			movePlayer(e);
+			movePlayer();
+		}
+		else if (e->Tag() == "bullet")
+		{
+			float x = sf::Mouse::getPosition().x, y = sf::Mouse::getPosition().y;
+			moveBullet(e, {x, y});
 		}
 	}
 }
@@ -107,20 +121,36 @@ void Game::sysInput()
 						break;
 			}
 		}
+		//mouse down || mouse up
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			switch (event.mouseButton.button)
+			{
+				case sf::Mouse::Left:
+					spawnBullet( vec2(mPlayer->cTransform->position.x, mPlayer->cTransform->position.y));
+					break;
+			}
+		}
 	}
 }
 
 void Game::sysRender()
 {
 	mWindow.clear();
-	//draw player?
-	mPlayer->cShape->shape.setPosition(
-		mPlayer->cTransform->position.x, mPlayer->cTransform->position.y);
 	mPlayer->cTransform->angle += 1.0f;
 	mPlayer->cShape->shape.setRotation(
 		mPlayer->cTransform->angle
 	);
-	mWindow.draw(mPlayer->cShape->shape);
+
+	for (auto e : mEntities.getEntities())
+	{
+		e->cShape->shape.setPosition(
+			e->cTransform->position.x, e->cTransform->position.y);
+	}
+	for(auto e: mEntities.getEntities())
+	{
+		mWindow.draw(e->cShape->shape);
+	}
 	mWindow.display();
 }
 
@@ -129,23 +159,32 @@ void Game::sysCollision()
 	//make sure all the entities don't go out of bounds
 	for (auto e : mEntities.getEntities())
 	{
-		if (e->cTransform->position.x < 0)
+		if (e->cTransform->position.x-e->cShape->shape.getRadius() < 0)
 		{
-			e->cTransform->position.x = 0;
+			if (e->Tag() == "player") {
+				e->cTransform->position.x = std::abs(e->cTransform->position.x + e->cShape->shape.getRadius());
+				e->destroy();
+			}
 		}
-		if (e->cTransform->position.y < 0)
+		if (e->cTransform->position.x + e->cShape->shape.getRadius() > mWindow.getSize().x)
 		{
-			e->cTransform->position.y = 0;
+			if (e->Tag() == "player") {
+				e->cTransform->position.x = std::abs(e->cTransform->position.x - e->cShape->shape.getRadius());
+			}
 		}
-		if (e->cTransform->position.x > mWindow.getSize().x)
+		if (e->cTransform->position.y - e->cShape->shape.getRadius() < 0)
 		{
-			e->cTransform->position.x = mWindow.getSize().x - e->cShape->shape.getRadius();
+			if (e->Tag() == "player") {
+				e->cTransform->position.y = std::abs(e->cTransform->position.y + e->cShape->shape.getRadius());
+			}
 		}
-		if (e->cTransform->position.y > mWindow.getSize().y)
+		if (e->cTransform->position.y + e->cShape->shape.getRadius() > mWindow.getSize().y)
 		{
-			e->cTransform->position.y = mWindow.getSize().y;
-
+			if (e->Tag() == "player") {
+				e->cTransform->position.y = std::abs(e->cTransform->position.y - e->cShape->shape.getRadius());
+			}
 		}
+		
 	}
 }
 
@@ -155,6 +194,24 @@ void Game::sysSpawnEnemy()
 
 void Game::sysHealth()
 {
+	for (auto e : mEntities.getEntities())
+	{
+		if (!e->cHealth) { continue; }
+		if(e->cHealth->health <= 0)
+		{
+			std::cout << e->cHealth->health << std::endl;
+			e->destroy();
+		}
+		else
+		{
+			e->cHealth->health -= 1;
+			std::cout << e->cHealth->health << std::endl;
+			//change the alpha color of the shape to represent the health
+			auto color = e->cShape->shape.getFillColor();
+			color.a = (e->cHealth->health / mBulletConfig.Health) * 255;
+			e->cShape->shape.setFillColor(color);
+		}
+	}
 }
 
 void Game::spawnEnemy()
@@ -185,17 +242,36 @@ void Game::spawnPlayer()
 
 void Game::spawnSmallerEnemy(std::shared_ptr<Entity> enemy)
 {
+	
 }
 
-void Game::spawnBullet(std::shared_ptr<Entity> entity, const vec2& mousePos)
+void Game::spawnBullet(const vec2& mousePos)
 {
+	//create new entity
+	auto bullet = mEntities.addEntity("bullet");
+	//attach transform component
+	bullet->cTransform = std::make_shared<CTransform>(
+		vec2(mPlayer->cTransform->position.x, mPlayer->cTransform->position.y),
+		vec2(0, 0), 0);
+	//attach the shape to the entity
+	/*std::mt19937 rng(random_seed());
+	std::uniform_int_distribution<int> gen(mBuklletConfig.MinShapeVertices, mBulletConfig.MaxShapeVertices);
+	auto shapeVertices = gen(rng);*/
+	bullet->cShape = std::make_shared<CShape>
+		(mBulletConfig.ShapeRadius, mBulletConfig.ShapeVertices,
+			mBulletConfig.FillColor, mBulletConfig.OutlineColor, mBulletConfig.OutlineThickness);
+	//attach the collision component to the entity
+	bullet->cCollision = std::make_shared<CCollision>(mBulletConfig.CollisionRadius);
+	//attach the input component to the entity
+	bullet->cInput = std::make_shared<CInput>();
+	bullet->cHealth = std::make_shared<CHealth>(mBulletConfig.Health);
 }
 
 void Game::spawnPowerup(std::shared_ptr<Entity> player)
 {
 }
 
-void Game::movePlayer(std::shared_ptr<Entity> player)
+void Game::movePlayer()
 {
 	//update player velocity based on input(wasd)
 	auto speed = mPlayerConfig.Speed;
@@ -219,5 +295,19 @@ void Game::movePlayer(std::shared_ptr<Entity> player)
 	}
 	mPlayer->cTransform->velocity = player_velocity;
 	mPlayer->cTransform->position += mPlayer->cTransform->velocity;
+}
+
+void Game::moveBullet(std::shared_ptr<Entity> player, vec2 mousePos)
+{
+
+	//get angle between player and mouse
+	auto angle = atan2(mousePos.y - player->cTransform->position.y, mousePos.x - player->cTransform->position.x);
+	//update bullet velocity based on angle
+	auto speed = mBulletConfig.Speed;
+	vec2 bullet_velocity = {0, 0};
+	bullet_velocity.x = speed * cos(angle);
+	bullet_velocity.y = speed * sin(angle);
+	player->cTransform->velocity = bullet_velocity;
+	player->cTransform->position += player->cTransform->velocity;
 }
  

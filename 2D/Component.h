@@ -40,7 +40,6 @@ struct CInput {
 	bool left{ false };
 	bool up{ false };
 	bool down{ false };
-	bool fire{ false };
 
 };
 

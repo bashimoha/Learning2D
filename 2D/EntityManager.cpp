@@ -3,18 +3,8 @@
 void remove_dead_entity(EntityVector& entities)
 {
 	//I think adding all the dead entities to a vector and then deleting all of them at once is faster than deleting them one by one. maybe not? idk.
-	EntityVector dlt;
-	for (auto e : entities)
-	{
-		if (!e->isActive())
-		{
-			dlt.push_back(e);
-		}
-	} 
-	for (auto e : dlt)
-	{
-		entities.erase(std::remove(entities.begin(), entities.end(), e), entities.end());
-	}
+	auto erase = std::remove_if(entities.begin(), entities.end(), [](const std::shared_ptr<Entity> e) { return !e->isActive(); });
+	entities.erase(erase, entities.end());
 }
 EntityManager::EntityManager()
 	:mNextEntityID(0)
@@ -32,7 +22,6 @@ void EntityManager::update()
 	mEntities_toAdd.clear();
 	
 	//rmv dead entities from m_entities and m_entitiesMap
-	//NOTE: find a better way to do this ?!? redundant work?
 	remove_dead_entity(mEntities);
 	for (auto& pair : mEntitiesMap)
 	{

@@ -42,10 +42,8 @@ struct BulletConfig {
 	sf::Color FillColor{};
 	sf::Color OutlineColor{};
 	int OutlineThickness{};
-	int MinShapeVertices{};
-	int MaxShapeVertices{};
+	int ShapeVertices{};
 	int Health{};
-	int SpawnInterval{};
 };
 
 
@@ -60,7 +58,8 @@ private:
 	PlayerConfig mPlayerConfig;
 	EnemyConfig mEnemyConfig;
 	BulletConfig mBulletConfig;
-	
+	std::random_device random_seed{};
+		
 	sf::Font mFont;
 	sf::Text mText;
 	size_t mPlayerScore{0};
@@ -86,7 +85,8 @@ private:
 	void spawnEnemy();
 	void spawnPlayer();
 	void spawnSmallerEnemy(std::shared_ptr<Entity> enemy);
-	void spawnBullet(std::shared_ptr<Entity> entity,const vec2& mousePos);
+	void spawnBullet(const vec2& mousePos);
 	void spawnPowerup(std::shared_ptr<Entity> player);
-	void movePlayer(std::shared_ptr<Entity> enemy);
+	void movePlayer();
+	void moveBullet(std::shared_ptr<Entity> player, vec2 direction);
 };
