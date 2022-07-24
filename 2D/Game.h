@@ -89,8 +89,10 @@ private:
 	void spawnPowerup(std::shared_ptr<Entity> player);
 	
 	void movePlayer();
-	void moveBullet(std::shared_ptr<Entity> player);
+	void moveBullet(std::shared_ptr<Entity> bullet);
+	void moveEnemy(std::shared_ptr<Entity> enemy);
 
 	//check for collisions helper
-	bool CollidedWithTheWall(const std::shared_ptr<Entity>& entity, const vec2& window_dimension);
+	bool entityWallCollided(const std::shared_ptr<Entity>& entity);
+	bool entityCollided(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2);
 };

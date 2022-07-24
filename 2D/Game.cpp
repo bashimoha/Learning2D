@@ -67,6 +67,19 @@ void Game::Init(const std::string& config)
 		>> mBulletConfig.ShapeVertices
 		>> mBulletConfig.Health;
 	mBulletConfig.OutlineColor = sf::Color(r, g, b);
+
+	//read enemy info
+	file>>temp>> mEnemyConfig.ShapeRadius
+		>> mEnemyConfig.CollisionRadius
+		>> mEnemyConfig.MinSpeed
+		>> mEnemyConfig.MaxSpeed
+		>>r>>g>>b
+		>> mEnemyConfig.OutlineThickness
+		>> mEnemyConfig.MinShapeVertices
+		>> mEnemyConfig.MaxShapeVertices
+		>>mEnemyConfig.smallHealth
+		>>mEnemyConfig.SpawnInterval;
+	mEnemyConfig.OutlineColor = sf::Color(r, g, b);
 	file.close();
 }
 
@@ -86,6 +99,10 @@ void Game::sysMovement()
 		else if (e->Tag() == "bullet")
 		{
 			moveBullet(e);
+		}
+		else if (e->Tag() == "enemy")
+		{
+			moveEnemy(e);
 		}
 	}
 }
@@ -149,36 +166,36 @@ void Game::sysCollision()
 	//make sure all the entities don't go out of bounds
 	for (auto e : mEntities.getEntities())
 	{
-		if (e->cTransform->position.x - e->cShape->shape.getRadius() < 0)
-		{
-			if (e->Tag() == "player") {
-				e->cTransform->position.x = std::abs(e->cTransform->position.x + e->cShape->shape.getRadius());
+		//if the entity is out of bounds, move it back in
+		if (e->Tag() == "enemy") {
+			if (entityWallCollided(e))
+			{
+				e->cTransform->velocity = e->cTransform->velocity * (-1);
+			}
+			//collides with player it dies
+			if (entityCollided(e, mPlayer))
+			{
+				e->destroy();
+				//respawn player
+				mPlayer->destroy();
+				spawnPlayer();
 			}
 		}
-		if (e->cTransform->position.x + e->cShape->shape.getRadius() > mWindow.getSize().x)
-		{
-			if (e->Tag() == "player") {
-				e->cTransform->position.x = std::abs(e->cTransform->position.x - e->cShape->shape.getRadius());
-			}
-		}
-		if (e->cTransform->position.y - e->cShape->shape.getRadius() < 0)
-		{
-			if (e->Tag() == "player") {
-				e->cTransform->position.y = std::abs(e->cTransform->position.y + e->cShape->shape.getRadius());
-			}
-		}
-		if (e->cTransform->position.y + e->cShape->shape.getRadius() > mWindow.getSize().y)
-		{
-			if (e->Tag() == "player") {
-				e->cTransform->position.y = std::abs(e->cTransform->position.y - e->cShape->shape.getRadius());
-			}
-		}
-
 	}
+	
+	
 }
 
 void Game::sysSpawnEnemy()
 {
+	//only spawn enemies if the lastspawn time is greater than the spawn interval
+	if (mFrame - mLastEnemySpawnTime > mEnemyConfig.SpawnInterval)
+	{
+		//spawn an enemy
+		spawnEnemy();
+		//reset the last spawn time
+		mLastEnemySpawnTime = mFrame;
+	}
 }
 
 void Game::sysHealth()
@@ -201,9 +218,6 @@ void Game::sysHealth()
 	}
 }
 
-void Game::spawnEnemy()
-{
-}
 
 void Game::spawnPlayer()
 {
@@ -227,9 +241,38 @@ void Game::spawnPlayer()
 	mPlayer = entity;
 }
 
+void Game::spawnEnemy()
+{
+	auto entity = mEntities.addEntity("enemy");
+	std::mt19937 rng(random_seed());
+	std::uniform_int_distribution<int> xDist( 0+mEnemyConfig.ShapeRadius,(int) mWindow.getSize().x- mEnemyConfig.ShapeRadius);
+	std::uniform_int_distribution<int> yDist(
+		0 + mEnemyConfig.ShapeRadius, (int) mWindow.getSize().y - mEnemyConfig.ShapeRadius);
+	std::uniform_int_distribution<int> verticesDist(mEnemyConfig.MinShapeVertices, mEnemyConfig.MaxShapeVertices);
+	std::uniform_int_distribution<int> colorDist(0, 255);
+	std::uniform_int_distribution<int> speedDist(mEnemyConfig.MinSpeed, mEnemyConfig.MaxSpeed);
+	auto x = xDist(rng);
+	auto y = yDist(rng);
+	std::cout<<"x: "<< x << " y: " << y << std::endl;
+	
+	//attach transform component
+	entity->cTransform = std::make_shared<CTransform>(
+		vec2(x, y)
+		, vec2(speedDist(rng), speedDist(rng)),
+		0);
+	//attach shape component
+	entity->cShape = std::make_shared<CShape>
+		(mEnemyConfig.ShapeRadius, verticesDist(rng),
+			sf::Color(colorDist(rng), colorDist(rng), colorDist(rng)),
+			mEnemyConfig.OutlineColor,
+			mEnemyConfig.OutlineThickness);
+	//attach collision component to the entity
+	entity->cCollision = std::make_shared<CCollision>(mEnemyConfig.CollisionRadius);
+
+}
 void Game::spawnSmallerEnemy(std::shared_ptr<Entity> enemy)
 {
-
+	
 }
 
 void Game::spawnBullet()
@@ -242,7 +285,7 @@ void Game::spawnBullet()
 	//get the angle between the two points
 	auto angle = atan2(mousePos.y - playerPos.y, mousePos.x - playerPos.x);
 	//get the velocity of the bullet
-	auto velocity = vec2(cos(angle), sin(angle)) * mBulletConfig.Speed;
+	auto velocity = vec2(cos(angle), sin(angle)).normalize() * mBulletConfig.Speed;
 	//attach transform component
 	bullet->cTransform = std::make_shared<CTransform>(
 		playerPos,
@@ -300,10 +343,19 @@ void Game::moveBullet(std::shared_ptr<Entity> bullet)
 	bullet->cTransform->position += bullet->cTransform->velocity;
 	//update the shape position to match the transform position
 	bullet->cShape->shape.setPosition(bullet->cTransform->position.x, bullet->cTransform->position.y);
+	bullet->cShape->shape.setRotation(bullet->cTransform->angle);
 }
 
-bool CollidedWithTheWall(const std::shared_ptr<Entity>& entity, const vec2& window_dimension)
+void Game::moveEnemy(std::shared_ptr<Entity> enemy)
 {
+	enemy->cTransform->position += enemy->cTransform->velocity;
+	enemy->cShape->shape.setPosition(enemy->cTransform->position.x, enemy->cTransform->position.y);
+	enemy->cShape->shape.setRotation(enemy->cTransform->angle);
+}
+
+bool Game::entityWallCollided(const std::shared_ptr<Entity>& entity)
+{
+	auto window_dimension = mWindow.getSize();
 	
 	if (
 		   entity->cTransform->position.x - entity->cShape->shape.getRadius() < 0
@@ -316,3 +368,10 @@ bool CollidedWithTheWall(const std::shared_ptr<Entity>& entity, const vec2& wind
 	return false;
 }
 
+bool Game::entityCollided(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2)
+{
+	auto position_diff = entity1->cTransform->position - entity2->cTransform->position;
+	auto distance = position_diff.x * position_diff.x + position_diff.y * position_diff.y;
+	auto radius_sum = entity1->cShape->shape.getRadius() + entity2->cShape->shape.getRadius();
+	return distance < radius_sum* radius_sum;
+}
