@@ -40,6 +40,7 @@ struct CInput {
 	bool left{ false };
 	bool up{ false };
 	bool down{ false };
+	vec2 mouse_position{};
 
 };
 

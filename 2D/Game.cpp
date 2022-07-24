@@ -20,7 +20,7 @@ void Game::run()
 		sysMovement();
 		sysRender();
 		mFrame++;
-		
+
 	}
 }
 
@@ -36,15 +36,15 @@ void Game::Init(const std::string& config)
 	//read the window dimension:
 	size_t width, height, max_fps, Fullscreen;
 	std::string temp;
-	file >>temp >> width >> height >> max_fps >> Fullscreen;
+	file >> temp >> width >> height >> max_fps >> Fullscreen;
 	mWindow.create(sf::VideoMode(width, height), "fart", sf::Style::Close | sf::Style::Resize);
 
 	mWindow.setFramerateLimit(max_fps);
-	
+
 	//read the players settings
 
 	int r, g, b;
-	
+
 	file >> temp >> mPlayerConfig.ShapeRadius
 		>> mPlayerConfig.CollisionRadius
 		>> mPlayerConfig.Speed
@@ -77,7 +77,7 @@ void Game::setPause(bool pause)
 
 void Game::sysMovement()
 {
-	for(auto e: mEntities.getEntities())
+	for (auto e : mEntities.getEntities())
 	{
 		if (e->Tag() == "player")
 		{
@@ -85,8 +85,7 @@ void Game::sysMovement()
 		}
 		else if (e->Tag() == "bullet")
 		{
-			float x = sf::Mouse::getPosition().x, y = sf::Mouse::getPosition().y;
-			moveBullet(e, {x, y});
+			moveBullet(e);
 		}
 	}
 }
@@ -107,18 +106,18 @@ void Game::sysInput()
 			switch (event.key.code)
 			{
 				//toggle the pressed state
-				case sf::Keyboard::W:
-					mPlayer->cInput->up = !(mPlayer->cInput->up);
-					break;
-				case sf::Keyboard::S:
-					mPlayer->cInput->down = !(mPlayer->cInput->down);
-					break;
-				case sf::Keyboard::A:
-					mPlayer->cInput->left = !(mPlayer->cInput->left);
-						break;
-				case sf::Keyboard::D:
-					mPlayer->cInput->right = !(mPlayer->cInput->right);
-						break;
+			case sf::Keyboard::W:
+				mPlayer->cInput->up = !(mPlayer->cInput->up);
+				break;
+			case sf::Keyboard::S:
+				mPlayer->cInput->down = !(mPlayer->cInput->down);
+				break;
+			case sf::Keyboard::A:
+				mPlayer->cInput->left = !(mPlayer->cInput->left);
+				break;
+			case sf::Keyboard::D:
+				mPlayer->cInput->right = !(mPlayer->cInput->right);
+				break;
 			}
 		}
 		//mouse down || mouse up
@@ -126,9 +125,9 @@ void Game::sysInput()
 		{
 			switch (event.mouseButton.button)
 			{
-				case sf::Mouse::Left:
-					spawnBullet( vec2(mPlayer->cTransform->position.x, mPlayer->cTransform->position.y));
-					break;
+			case sf::Mouse::Left:
+				spawnBullet();
+				break;
 			}
 		}
 	}
@@ -137,17 +136,8 @@ void Game::sysInput()
 void Game::sysRender()
 {
 	mWindow.clear();
-	mPlayer->cTransform->angle += 1.0f;
-	mPlayer->cShape->shape.setRotation(
-		mPlayer->cTransform->angle
-	);
 
 	for (auto e : mEntities.getEntities())
-	{
-		e->cShape->shape.setPosition(
-			e->cTransform->position.x, e->cTransform->position.y);
-	}
-	for(auto e: mEntities.getEntities())
 	{
 		mWindow.draw(e->cShape->shape);
 	}
@@ -159,11 +149,10 @@ void Game::sysCollision()
 	//make sure all the entities don't go out of bounds
 	for (auto e : mEntities.getEntities())
 	{
-		if (e->cTransform->position.x-e->cShape->shape.getRadius() < 0)
+		if (e->cTransform->position.x - e->cShape->shape.getRadius() < 0)
 		{
 			if (e->Tag() == "player") {
 				e->cTransform->position.x = std::abs(e->cTransform->position.x + e->cShape->shape.getRadius());
-				e->destroy();
 			}
 		}
 		if (e->cTransform->position.x + e->cShape->shape.getRadius() > mWindow.getSize().x)
@@ -184,7 +173,7 @@ void Game::sysCollision()
 				e->cTransform->position.y = std::abs(e->cTransform->position.y - e->cShape->shape.getRadius());
 			}
 		}
-		
+
 	}
 }
 
@@ -197,15 +186,13 @@ void Game::sysHealth()
 	for (auto e : mEntities.getEntities())
 	{
 		if (!e->cHealth) { continue; }
-		if(e->cHealth->health <= 0)
+		if (e->cHealth->health <= 0)
 		{
-			std::cout << e->cHealth->health << std::endl;
 			e->destroy();
 		}
 		else
 		{
 			e->cHealth->health -= 1;
-			std::cout << e->cHealth->health << std::endl;
 			//change the alpha color of the shape to represent the health
 			auto color = e->cShape->shape.getFillColor();
 			color.a = (e->cHealth->health / mBulletConfig.Health) * 255;
@@ -242,28 +229,32 @@ void Game::spawnPlayer()
 
 void Game::spawnSmallerEnemy(std::shared_ptr<Entity> enemy)
 {
-	
+
 }
 
-void Game::spawnBullet(const vec2& mousePos)
+void Game::spawnBullet()
 {
 	//create new entity
 	auto bullet = mEntities.addEntity("bullet");
+	//get the the mouse position and player position
+	auto mousePos = sf::Mouse::getPosition(mWindow);
+	auto playerPos = mPlayer->cTransform->position;
+	//get the angle between the two points
+	auto angle = atan2(mousePos.y - playerPos.y, mousePos.x - playerPos.x);
+	//get the velocity of the bullet
+	auto velocity = vec2(cos(angle), sin(angle)) * mBulletConfig.Speed;
 	//attach transform component
 	bullet->cTransform = std::make_shared<CTransform>(
-		vec2(mPlayer->cTransform->position.x, mPlayer->cTransform->position.y),
-		vec2(0, 0), 0);
+		playerPos,
+		velocity,
+		angle);
 	//attach the shape to the entity
-	/*std::mt19937 rng(random_seed());
-	std::uniform_int_distribution<int> gen(mBuklletConfig.MinShapeVertices, mBulletConfig.MaxShapeVertices);
-	auto shapeVertices = gen(rng);*/
 	bullet->cShape = std::make_shared<CShape>
 		(mBulletConfig.ShapeRadius, mBulletConfig.ShapeVertices,
 			mBulletConfig.FillColor, mBulletConfig.OutlineColor, mBulletConfig.OutlineThickness);
 	//attach the collision component to the entity
 	bullet->cCollision = std::make_shared<CCollision>(mBulletConfig.CollisionRadius);
-	//attach the input component to the entity
-	bullet->cInput = std::make_shared<CInput>();
+	//attach the health component to the entity
 	bullet->cHealth = std::make_shared<CHealth>(mBulletConfig.Health);
 }
 
@@ -275,7 +266,10 @@ void Game::movePlayer()
 {
 	//update player velocity based on input(wasd)
 	auto speed = mPlayerConfig.Speed;
-	vec2 player_velocity = {0, 0};
+	vec2 player_velocity = { 0, 0 };
+	mPlayer->cTransform->angle += 1.0f;
+	mPlayer->cShape->shape.setRotation(
+		mPlayer->cTransform->angle);
 
 	if (mPlayer->cInput->up)
 	{
@@ -295,19 +289,30 @@ void Game::movePlayer()
 	}
 	mPlayer->cTransform->velocity = player_velocity;
 	mPlayer->cTransform->position += mPlayer->cTransform->velocity;
+	//update the shape position to match the transform position
+	mPlayer->cShape->shape.setPosition(
+		mPlayer->cTransform->position.x,
+		mPlayer->cTransform->position.y);
 }
 
-void Game::moveBullet(std::shared_ptr<Entity> player, vec2 mousePos)
+void Game::moveBullet(std::shared_ptr<Entity> bullet)
 {
-
-	//get angle between player and mouse
-	auto angle = atan2(mousePos.y - player->cTransform->position.y, mousePos.x - player->cTransform->position.x);
-	//update bullet velocity based on angle
-	auto speed = mBulletConfig.Speed;
-	vec2 bullet_velocity = {0, 0};
-	bullet_velocity.x = speed * cos(angle);
-	bullet_velocity.y = speed * sin(angle);
-	player->cTransform->velocity = bullet_velocity;
-	player->cTransform->position += player->cTransform->velocity;
+	bullet->cTransform->position += bullet->cTransform->velocity;
+	//update the shape position to match the transform position
+	bullet->cShape->shape.setPosition(bullet->cTransform->position.x, bullet->cTransform->position.y);
 }
- 
+
+bool CollidedWithTheWall(const std::shared_ptr<Entity>& entity, const vec2& window_dimension)
+{
+	
+	if (
+		   entity->cTransform->position.x - entity->cShape->shape.getRadius() < 0
+		|| entity->cTransform->position.x + entity->cShape->shape.getRadius() > window_dimension.x
+		|| entity->cTransform->position.y - entity->cShape->shape.getRadius() < 0
+		|| entity->cTransform->position.y + entity->cShape->shape.getRadius() > window_dimension.y)
+	{
+		return true;
+	}
+	return false;
+}
+
