@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
 #include "Common.h"
 #include "Entity.h"
@@ -95,4 +94,6 @@ private:
 	//check for collisions helper
 	bool entityWallCollided(const std::shared_ptr<Entity>& entity);
 	bool entityCollided(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2);
+
+
 };

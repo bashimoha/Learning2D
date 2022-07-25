@@ -100,7 +100,7 @@ void Game::sysMovement()
 		{
 			moveBullet(e);
 		}
-		else if (e->Tag() == "enemy")
+		else
 		{
 			moveEnemy(e);
 		}
@@ -180,6 +180,19 @@ void Game::sysCollision()
 				mPlayer->destroy();
 				spawnPlayer();
 			}
+			//if enemy colides with bullet enemy get destroyed
+			for (auto b : mEntities.getEntities())
+			{
+				if (b->Tag() == "bullet")
+				{
+					if (entityCollided(e, b))
+					{
+						e->destroy();
+						b->destroy();
+						spawnSmallerEnemy(e);
+					}
+				}
+			}
 		}
 	}
 	
@@ -212,8 +225,8 @@ void Game::sysHealth()
 			e->cHealth->health -= 1;
 			//change the alpha color of the shape to represent the health
 			auto color = e->cShape->shape.getFillColor();
-			color.a = (e->cHealth->health / mBulletConfig.Health) * 255;
-			e->cShape->shape.setFillColor(color);
+			
+			
 		}
 	}
 }
@@ -253,11 +266,12 @@ void Game::spawnEnemy()
 	std::uniform_int_distribution<int> speedDist(mEnemyConfig.MinSpeed, mEnemyConfig.MaxSpeed);
 	auto x = xDist(rng);
 	auto y = yDist(rng);
+	
 	std::cout<<"x: "<< x << " y: " << y << std::endl;
 	
 	//attach transform component
 	entity->cTransform = std::make_shared<CTransform>(
-		vec2(x, y)
+		vec2(xDist(rng), yDist(rng))
 		, vec2(speedDist(rng), speedDist(rng)),
 		0);
 	//attach shape component
@@ -272,7 +286,28 @@ void Game::spawnEnemy()
 }
 void Game::spawnSmallerEnemy(std::shared_ptr<Entity> enemy)
 {
+	auto N_enemies = enemy->cShape->shape.getPointCount();
+	auto angle = std::_Pi*2 / N_enemies;
 	
+	
+	for (int i= 0; i < N_enemies; i++)
+	{
+		auto entity = mEntities.addEntity("enemy");
+		//the postition(x, y) of the smaller enemy is the same as the postion of the bigger enemy partioned into n_part. where n_part is 360/Bigenemy.vertices.
+		auto x = enemy->cTransform->position.x + cos(angle * i) * enemy->cShape->shape.getRadius();
+		auto y = enemy->cTransform->position.y + sin(angle*i) * enemy->cShape->shape.getRadius();
+		auto dir = vec2(cos(angle * i) * enemy->cShape->shape.getRadius(), sin(angle * i) * enemy->cShape->shape.getRadius()).normalize();
+		
+		entity->cTransform = std::make_shared<CTransform>(
+			vec2(x, y), dir * mEnemyConfig.MinSpeed
+			, 0);
+		entity->cShape = std::make_shared<CShape>
+			(enemy->cShape->shape.getRadius()/2, N_enemies,
+				enemy->cShape->shape.getFillColor(), mEnemyConfig.OutlineColor, mEnemyConfig.OutlineThickness);
+		entity->cCollision = std::make_shared<CCollision>(mEnemyConfig.CollisionRadius);
+		entity->cHealth = std::make_shared<CHealth>(mEnemyConfig.smallHealth);
+		
+	}
 }
 
 void Game::spawnBullet()
@@ -303,6 +338,7 @@ void Game::spawnBullet()
 
 void Game::spawnPowerup(std::shared_ptr<Entity> player)
 {
+	
 }
 
 void Game::movePlayer()
@@ -331,7 +367,13 @@ void Game::movePlayer()
 		player_velocity.x = speed;
 	}
 	mPlayer->cTransform->velocity = player_velocity;
+	auto player_pos = mPlayer->cTransform->position;
 	mPlayer->cTransform->position += mPlayer->cTransform->velocity;
+	if (entityWallCollided(mPlayer))
+	{
+		mPlayer->cTransform->position = player_pos;
+	}
+	
 	//update the shape position to match the transform position
 	mPlayer->cShape->shape.setPosition(
 		mPlayer->cTransform->position.x,
@@ -342,6 +384,9 @@ void Game::moveBullet(std::shared_ptr<Entity> bullet)
 {
 	bullet->cTransform->position += bullet->cTransform->velocity;
 	//update the shape position to match the transform position
+	//check if player is out of bound
+
+	
 	bullet->cShape->shape.setPosition(bullet->cTransform->position.x, bullet->cTransform->position.y);
 	bullet->cShape->shape.setRotation(bullet->cTransform->angle);
 }
