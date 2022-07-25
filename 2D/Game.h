@@ -67,6 +67,7 @@ private:
 	size_t mFrame{0};
 	size_t mLastEnemySpawnTime{ 0 };
 	
+	
 	std::shared_ptr<Entity> mPlayer;
 
 	void Init(const std::string& config);

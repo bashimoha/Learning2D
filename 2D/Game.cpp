@@ -13,14 +13,18 @@ void Game::run()
 	while (mRunning)
 	{
 		mEntities.update();
-		sysSpawnEnemy();
-		sysCollision();
+		//print true if mPause is true
+		if (!mPause)
+		{
+			sysSpawnEnemy();
+			sysCollision();
+			sysMovement();
+			sysHealth();
+		}
 		sysInput();
-		sysHealth();
-		sysMovement();
 		sysRender();
-		mFrame++;
 
+		mFrame++;
 	}
 }
 
@@ -135,6 +139,15 @@ void Game::sysInput()
 			case sf::Keyboard::D:
 				mPlayer->cInput->right = !(mPlayer->cInput->right);
 				break;
+			case sf::Keyboard::P:
+				if (event.type == sf::Event::KeyPressed)
+				{
+					setPause(true);
+				}
+				else
+				{
+					setPause(false);
+				}
 			}
 		}
 		//mouse down || mouse up
@@ -156,6 +169,9 @@ void Game::sysRender()
 
 	for (auto e : mEntities.getEntities())
 	{
+		e->cTransform->angle += 1.0f;
+		e->cShape->shape.setRotation(
+			e->cTransform->angle);
 		mWindow.draw(e->cShape->shape);
 	}
 	mWindow.display();
