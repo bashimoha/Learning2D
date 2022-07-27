@@ -184,9 +184,13 @@ void Game::sysCollision()
 	{
 		//if the entity is out of bounds, move it back in
 		if (e->Tag() == "enemy") {
-			if (entityWallCollided(e))
+			if (entityWallCollided(e)[0] || entityWallCollided(e)[1])
 			{
-				e->cTransform->velocity = e->cTransform->velocity * (-1);
+				e->cTransform->velocity.x = e->cTransform->velocity.x *-1;
+			}
+			if (entityWallCollided(e)[2] || entityWallCollided(e)[3])
+			{
+				e->cTransform->velocity.y = e->cTransform->velocity.y *-1;
 			}
 			//collides with player it dies
 			if (entityCollided(e, mPlayer))
@@ -283,7 +287,6 @@ void Game::spawnEnemy()
 	auto x = xDist(rng);
 	auto y = yDist(rng);
 	
-	std::cout<<"x: "<< x << " y: " << y << std::endl;
 	
 	//attach transform component
 	entity->cTransform = std::make_shared<CTransform>(
@@ -385,7 +388,7 @@ void Game::movePlayer()
 	mPlayer->cTransform->velocity = player_velocity;
 	auto player_pos = mPlayer->cTransform->position;
 	mPlayer->cTransform->position += mPlayer->cTransform->velocity;
-	if (entityWallCollided(mPlayer))
+	if (entityWallCollided(mPlayer).any())
 	{
 		mPlayer->cTransform->position = player_pos;
 	}
@@ -414,19 +417,29 @@ void Game::moveEnemy(std::shared_ptr<Entity> enemy)
 	enemy->cShape->shape.setRotation(enemy->cTransform->angle);
 }
 
-bool Game::entityWallCollided(const std::shared_ptr<Entity>& entity)
+//checks if entity is out of bound and returns bitset<4> where[0] =left, [1] = right, [2] = top, [3] = bottom
+std::bitset<4> Game::entityWallCollided(const std::shared_ptr<Entity>& entity)
 {
+	std::bitset<4> collided;  
 	auto window_dimension = mWindow.getSize();
 	
-	if (
-		   entity->cTransform->position.x - entity->cShape->shape.getRadius() < 0
-		|| entity->cTransform->position.x + entity->cShape->shape.getRadius() > window_dimension.x
-		|| entity->cTransform->position.y - entity->cShape->shape.getRadius() < 0
-		|| entity->cTransform->position.y + entity->cShape->shape.getRadius() > window_dimension.y)
+	if (entity->cTransform->position.x - entity->cShape->shape.getRadius() < 0)
 	{
-		return true;
+		collided[0] = true;
 	}
-	return false;
+	if (entity->cTransform->position.x + entity->cShape->shape.getRadius() > window_dimension.x)
+	{
+		collided[1] = true;
+	}
+	if (entity->cTransform->position.y - entity->cShape->shape.getRadius() < 0)
+	{
+		collided[2] = true;
+	}
+	if (entity->cTransform->position.y + entity->cShape->shape.getRadius() > window_dimension.y)
+	{
+		collided[3] = true;
+	}
+	return collided;
 }
 
 bool Game::entityCollided(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2)

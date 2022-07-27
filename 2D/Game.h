@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 
-
+#include <bitset>
 
 /*
 
@@ -93,7 +93,7 @@ private:
 	void moveEnemy(std::shared_ptr<Entity> enemy);
 
 	//check for collisions helper
-	bool entityWallCollided(const std::shared_ptr<Entity>& entity);
+	std::bitset<4> entityWallCollided(const std::shared_ptr<Entity>& entity);
 	bool entityCollided(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2);
 
 
