@@ -1,9 +1,15 @@
 #pragma once
 
 #include "Common.h"
-
-struct CTransform
+class Component
 {
+public:
+	bool hasComponent = false;
+};
+class CTransform: Component
+{
+public:
+
 	vec2 position{};
 	vec2 velocity{};
 	float angle;
@@ -13,8 +19,9 @@ struct CTransform
 	
 };
 
-struct CShape
+class CShape : Component
 {
+public:
 	sf::CircleShape shape{};
 	CShape(float radius, int pointCount, const sf::Color& fill,  const sf::Color outline, float thickness)
 		:shape(radius, pointCount)
@@ -27,14 +34,18 @@ struct CShape
 	}
 };
 
-struct CCollision {
+class CCollision : Component
+{
 	//this acts like a bounding box/circle
+public:
 	float radius{};
 	CCollision(float r)
 		:radius(r) {}
 };
 
-struct CInput {
+class CInput : Component
+{
+public:
 	CInput() {}
 	bool right{ false };
 	bool left{ false };
@@ -43,14 +54,16 @@ struct CInput {
 
 };
 
-struct CScore
+class CScore: Component
 {
+public:
 	int score{};
 	CScore(int s):score(s) {}
 	
 };
-struct CHealth
+class CHealth: Component
 {
+public:
 	int health{}; //should this be float? maybe
 	CHealth(int initialHealth)
 		:health(initialHealth) {

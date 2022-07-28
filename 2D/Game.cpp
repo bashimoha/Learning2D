@@ -1,3 +1,5 @@
+
+#if 0
 #include "Game.h"
 #include "Entity.h"
 
@@ -449,3 +451,4 @@ bool Game::entityCollided(const std::shared_ptr<Entity>& entity1, const std::sha
 	auto radius_sum = entity1->cShape->shape.getRadius() + entity2->cShape->shape.getRadius();
 	return distance < radius_sum* radius_sum;
 }
+#endif

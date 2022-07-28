@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _COMMON_H
+#define _COMMON_H
 
 #include <string>
 #include <vector>
@@ -6,16 +8,10 @@
 #include <memory>
 #include <fstream>
 #include <iostream>
-#include <sstream>>
+#include <sstream>
 #include <random>
-/*
-#include <functional>
-#include <chrono>
-
-#include <math.h>
-*/
+#include <sstream>
 #include <SFML/Graphics.hpp>
-
-
+#include <SFML/Audio.hpp>
 #include "Vec2.h"
-
+#endif
