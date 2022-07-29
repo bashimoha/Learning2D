@@ -11,11 +11,12 @@ public:
 	void Init(const std::string& path);
 	void Update();
 	void Quit();
-	void ChangeScene(const std::string& scene);
+	void ChangeScene(const std::string& scene, std::shared_ptr<Scene>);
 	std::shared_ptr<Scene> GetCurrentScene();
 	Assets GetAsset() const ;
 	sf::RenderWindow& Window();
 	void Input();
+	void Run();
 private:
 	std::map<std::string, std::shared_ptr<Scene> > mScenes;
 	sf::RenderWindow mWindow;

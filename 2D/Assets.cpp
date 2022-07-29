@@ -41,6 +41,11 @@ sf::Texture& Assets::getTexture(const std::string& name)
 	return mTextures[name];
 }
 
+sf::Font& Assets::getFont(const std::string& name)
+{
+	return mFonts[name];
+}
+
 void Assets::LoadFromFile(const std::string& path)
 {
 	std::ifstream file(path);
@@ -58,23 +63,26 @@ void Assets::LoadFromFile(const std::string& path)
 		{
 			std::string name, path;
 			file >> name >> path;
+			std::clog << "Loaded Texture: " << path << std::endl;
 			addTexture(name, path);
 		}
 		else if(type == "Font")
 		{
 			std::string name, path;
 			file >> name >> path;
+			std::clog << "Loaded Font: " << path << std::endl;
 			addFont(name, path);
 		}
 		else if(type == "Sound")
 		{
 			std::string name, path;
 			file >> name >> path;
+			std::clog << "Loaded Sound: " << path << std::endl;
 			addSound(name, path);
 		}
 		else
 		{
-			std::cout << "Unknown type: " << type << std::endl;
+			std::cerr << "Unknown type: " << type << std::endl;
 		}
 	}
 }

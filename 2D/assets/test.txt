@@ -1,0 +1,3 @@
+Font LevelFont assets\fonts\menu.ttf
+Texture menu_background assets\images\menu_background.png
+Texture Menu_background assets\images\test.jpg

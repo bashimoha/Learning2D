@@ -1,18 +1,14 @@
 #include "Scene.h"
 
 
-Scene::Scene()
-	:mGame(nullptr)
-{
-}
 
 Scene::Scene(Engine* engine)
+	:mGame(engine)
 {
-	mGame = engine;
 }
 
 
-void Scene::regiserAction(int key, int action)
+void Scene::registerAction(int key, const std::string& action)
 {
 	mActions[key] = action;
 }
