@@ -1,7 +1,8 @@
 #include "Engine.h"
-#include "MenuScene.h"
+
 int main()
 {
-	Engine game("assets/test.txt" );
-	game.Run();
+	Engine engine("assets/test.txt");
+	engine.Run();
+	return 0;
 }

@@ -51,6 +51,12 @@
     <ClCompile Include="MenuScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -86,6 +92,12 @@
     <ClInclude Include="MenuScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\halfelven.ttf">
@@ -94,6 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="assets\test.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="leve01.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

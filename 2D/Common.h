@@ -11,6 +11,8 @@
 #include <sstream>
 #include <random>
 #include <sstream>
+#include <tuple>
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Vec2.h"

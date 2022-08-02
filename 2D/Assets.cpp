@@ -22,20 +22,11 @@ void Assets::addFont(const std::string& name, const std::string& path)
 	mFonts[name] = font;
 }
 
-void Assets::addSound(const std::string& name, const std::string& path)
+void Assets::addAnimation(const std::string& name, const sf::Texture& texture, size_t frameCount, float speed)
 {
-		sf::SoundBuffer sound_buffer;
-		if (!sound_buffer.loadFromFile(path))
-		{
-			std::cout << "Error loading sound file: " << path << std::endl;
-		}
-		else
-		{
-			sf::Sound sound;
-			sound.setBuffer(sound_buffer);
-			mSounds[name] = sound;
-		}
+	mAnimation[name] = Animation(name, texture, frameCount, speed);
 }
+
 sf::Texture& Assets::getTexture(const std::string& name)
 {
 	return mTextures[name];
@@ -43,7 +34,13 @@ sf::Texture& Assets::getTexture(const std::string& name)
 
 sf::Font& Assets::getFont(const std::string& name)
 {
+	//this is not safe cuz it will crash if the texture is not found
 	return mFonts[name];
+}
+
+Animation& Assets::getAnimation(const std::string& name)
+{
+	return mAnimation[name];
 }
 
 void Assets::LoadFromFile(const std::string& path)
@@ -73,12 +70,13 @@ void Assets::LoadFromFile(const std::string& path)
 			std::clog << "Loaded Font: " << path << std::endl;
 			addFont(name, path);
 		}
-		else if(type == "Sound")
+		else if(type == "Animation")
 		{
-			std::string name, path;
-			file >> name >> path;
-			std::clog << "Loaded Sound: " << path << std::endl;
-			addSound(name, path);
+			//sample animation format: Animation Stand64 TexStand64 1 0
+			std::string name, texture_name;
+			int frame, frame_count;
+			file >> name >> texture_name>> frame >> frame_count;
+			addAnimation(name, getTexture(texture_name), frame, frame_count);
 		}
 		else
 		{

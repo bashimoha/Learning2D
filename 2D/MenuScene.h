@@ -16,5 +16,7 @@ private:
 	std::string mTitle{""};
 	sf::Font menu_font;
 	sf::Text mTitleText;
+	sf::Text mInstruction;
+	sf::RectangleShape mBackground;
 };
 

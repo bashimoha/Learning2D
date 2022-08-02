@@ -5,8 +5,8 @@
 class EntityManager; 
 
 //tuple of components maybe a better way?
-typedef std::tuple<CTransform, CShape, CHealth,CInput, CCollision, CScore>
-ComponentTuple;
+using ComponentTuple = std::tuple<CTransform, CGravity, CHealth,CInput, CBoundingBox, CState, CAnimation>
+;
 
 class Entity
 {
@@ -20,28 +20,28 @@ public:
 	template <typename T>
 	bool hasComponent() const
 	{
-		return getComponent<T>().has;
+		auto& component = std::get<T>(mComponents);
+		return component.hasComponent;
 	}
 	template <typename T>
 	T& getComponent()
 	{
-		std::get<T>(mComponents);
+		return std::get<T>(mComponents);
 	}
 	template <typename T, typename... Targs>
 	T& addComponent(Targs&&... args)
 	{
 		auto& component = getComponent<T>();
-		component = T( std::forward<args>(args)... );
-		component.has = true;
+		component = T(std::forward<Targs>(args)...);
+		component.hasComponent = true;
 		return component;
 	}
 	
-
 private:
 	std::string mTag{"Default"};
 	size_t mId{0};
 	bool mActive{true};
-	std::shared_ptr<ComponentTuple> mComponents;
+	ComponentTuple mComponents;
 	Entity(const std::string& tag, size_t id);
 };
 

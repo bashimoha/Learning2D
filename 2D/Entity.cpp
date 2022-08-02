@@ -21,7 +21,7 @@ void Entity::destroy()
 }
 
 Entity::Entity(const std::string& tag, size_t id)
-	:mTag(tag), mId(id)
-
+	:mTag(tag), mId(id), mActive(true)
 {
+	
 }

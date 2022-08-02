@@ -7,21 +7,24 @@ class Scene;
 class Engine
 {
 public:
-	Engine(const std::string& path );
-	void Init(const std::string& path);
-	void Update();
+	Engine(const std::string& path);
 	void Quit();
 	void ChangeScene(const std::string& scene, std::shared_ptr<Scene>);
 	std::shared_ptr<Scene> GetCurrentScene();
-	Assets GetAsset() const ;
+	 Assets& GetAsset();
 	sf::RenderWindow& Window();
-	void Input();
 	void Run();
 private:
 	std::map<std::string, std::shared_ptr<Scene> > mScenes;
 	sf::RenderWindow mWindow;
 	Assets mAssets{};
-	bool mIsRunning{true};
+	bool mIsRunning{ true };
 	std::string mCurrentScene{};
+	void Init(const std::string& path);
+	void Update();
+	void Input();
+
+
+
 };
 

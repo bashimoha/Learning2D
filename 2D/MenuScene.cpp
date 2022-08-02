@@ -1,6 +1,7 @@
 #include "MenuScene.h"
 #include "Scene.h"
 #include "Engine.h"
+#include "GameScene.h"
 
 Menu::Menu(Engine* engine)
 	:Scene(engine)
@@ -17,14 +18,16 @@ void Menu::Init()
 	registerAction(sf::Keyboard::Escape, "Quit");
 
 	//menu_font = (mGame->GetAsset().getFont("Title"));
-	mTitle = "Elite Mario {Menu}";
+	mTitle = "Elite Jario {Menu}";
 	auto window_size = mGame->Window().getSize();
 	auto levels = 3;
 	menu_font = mGame->GetAsset().getFont("LevelFont");
-	mTitleText.setString("Mario");
+	
+	mTitleText.setString("Jario");
 	mTitleText.setFont(menu_font);
 	mTitleText.setCharacterSize(100);
 	mTitleText.setPosition(64, 0);
+	mBackground.setSize(sf::Vector2f(window_size.x, window_size.y));
 	
 	for (int i = 0; i < levels; i++)
 	{
@@ -42,6 +45,11 @@ void Menu::Init()
 	mLevelPaths.push_back("level2.txt");
 	mLevelPaths.push_back("level3.txt");
 	
+	mInstruction.setString("Play: P Quit:Esc  UP:W  Down:D");
+	mInstruction.setFont(menu_font);
+	mInstruction.setPosition(window_size.x - 62*8, window_size.y - 64);
+	mInstruction.setFillColor(sf::Color::Black);
+	mInstruction.setCharacterSize(32);
 	mGame->Window().setTitle(mTitle);
 }
 
@@ -52,9 +60,9 @@ void Menu::Update()
 
 void Menu::Render()
 {
-	
-	mGame->Window().clear(sf::Color::Cyan);
+	mGame->Window().clear(sf::Color(0x015d85));
 	mGame->Window().draw(mTitleText);
+	mGame->Window().draw(mInstruction);
 	int i = 0;
 	for (auto lvl : mLevelNames)
 	{
@@ -87,6 +95,12 @@ void Menu::DoAction(const Action& action)
 		}
 		else if (action.Name() == "Quit")
 		{
+			mGame->Quit();
+		}
+		else if (action.Name() == "Play")
+		{
+			mGame->ChangeScene("LevelScene", 
+				std::make_shared<GameScene>(mGame, "assets/level01.txt"));
 		}
 	}
 }
