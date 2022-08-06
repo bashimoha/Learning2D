@@ -7,7 +7,7 @@ Engine::Engine(const std::string& path)
 
 void Engine::Init(const std::string& path)
 {
-	mWindow.create(sf::VideoMode(800, 600), "SFML Engine");
+	mWindow.create(sf::VideoMode(1280, 704), "SFML Engine");
 	mWindow.setFramerateLimit(60);
 	mAssets.LoadFromFile(path);
 	//change to the entry point: maybe a better way is to add the scene and then change it. SO, that the engine don't know anything thing about the 

@@ -116,3 +116,4 @@ public:
 
 typedef _Vec2<float> vec2;
 typedef _Vec2<int>   ivec2;
+

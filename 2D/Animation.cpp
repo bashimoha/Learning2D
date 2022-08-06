@@ -8,10 +8,11 @@ Animation::Animation(const std::string& name, const sf::Texture& texture, size_t
 	mSize = vec2( (float)texture.getSize().x / frameCount, 
 		          (float)texture.getSize().y
 				);
+
+	
 	mSprite.setOrigin(mSize.x/2, mSize.y/2);
 	//set the texture rect to the first frame
 	mSprite.setTextureRect(sf::IntRect(std::floor(mCurrentFrame)*mSize.x, 0, mSize.x, mSize.y));
-	
 }
 Animation::Animation(const std::string& name, const sf::Texture& texture)
 	:Animation(name, texture, 1, 0)
@@ -21,12 +22,14 @@ Animation::Animation(const std::string& name, const sf::Texture& texture)
 
 void Animation::Update()
 {
+	//there is a bug somewhere in the code where I called the default constructor and it create an animation without any frame
+	if (mTotalFrames == 0)
+		return;
 	mDone = ++mCurrentFrame > mTotalFrames;
-	if (mDone)
-	{
-		
-	}
-	//TODO: obviously we gotta actually do something here like a actually update the sprite? 
+	mSpeed = mSpeed <1  ? 1 : mSpeed;
+	auto frame = (mCurrentFrame / mSpeed) % mTotalFrames;
+	sf::IntRect rect = sf::IntRect(std::floor(frame)*mSize.x, 0, mSize.x, mSize.y);
+	mSprite.setTextureRect(rect);
 }
 bool Animation::IsDone() const
 {

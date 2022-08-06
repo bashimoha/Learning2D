@@ -12,7 +12,7 @@ class CTransform: public Component
 {
 public:
 	CTransform() = default;
-	vec2 position{}, velocity{};
+	vec2 position{}, velocity{}, prev_position{};
 	float angle;
 	CTransform(const vec2& pos, const vec2& vel, float ang) 
 		:position(pos), velocity(vel), angle(ang) {}

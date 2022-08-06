@@ -76,6 +76,7 @@ void Assets::LoadFromFile(const std::string& path)
 			std::string name, texture_name;
 			int frame, frame_count;
 			file >> name >> texture_name>> frame >> frame_count;
+			std::cout << "Loaded Animation: "<< name << " " << texture_name << " " << frame << " " << frame_count << std::endl;
 			addAnimation(name, getTexture(texture_name), frame, frame_count);
 		}
 		else

@@ -1,9 +1,11 @@
 Font LevelFont assets\fonts\menu.ttf
 Font JarioFont assets\fonts\jario.ttf
+Font Arial assets\fonts\arial.ttf
 Texture menu_background assets\images\menu_background.png
 Texture TexBlock assets\images\block.png
 Texture TexBrick assets\images\brick.png
 Texture TexSmallCloud assets\images\cloud.png
+Texture TexcloudBig assets\images\triplecloud.png
 Texture TexDoubleBush assets\images\doublebush.png
 Texture TexFlag assets\images\flag.png
 Texture TexGoombaWalk assets\images\GoombaWalk.png
@@ -17,6 +19,11 @@ Texture TexStand16 assets\images\stand16.png
 Texture TexStand64 assets\images\stand64.png
 Texture TexQuestionBlock assets\images\questionblock.png
 Texture TexTripleBush assets\images\triplebush.png
+Texture TexSmallHill assets\images\hill.png
+Texture TexLargeHill assets\images\largehill.png
+Texture TexGiantMushroom assets\images\GiantMushroom.png
+Texture TexFlagPole assets\images\flagpole.png
+Texture TexWalking assets\images\walking.png
 Animation Block TexBlock 1 0
 Animation Brick TexBrick 1 0
 Animation SmallCloud TexSmallCloud 1 0
@@ -27,9 +34,15 @@ Animation Ground TexGround 1 0
 Animation Jump16 TexJump16 1 0
 Animation Jump64 TexJump64 1 0
 Animation Mushroom TexMushroom 1 0
-Animation Pipe TexPipe 1 0
+Animation PipeTall TexPipe 1 0
 Animation SingleBush TexSingleBush 1 0
 Animation Stand16 TexStand16 1 0
 Animation Stand64 TexStand64 1 0
 Animation TripleBush TexTripleBush 1 0
-Animation QuestionBlock TexQuestionBlock 4 10
+Animation Question TexQuestionBlock 4 3
+Animation CloudBig TexcloudBig 1 0
+Animation Hill TexSmallHill 1 0
+Animation LargeHill TexLargeHill 1 0
+Animation GiantMushroom TexGiantMushroom 1 0
+Animation FlagPole TexFlagPole 1 0
+Animation Walking TexWalking 3 10

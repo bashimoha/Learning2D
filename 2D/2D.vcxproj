@@ -138,6 +138,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="physics.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,13 +153,13 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="physics.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\test.txt" />
     <Text Include="config.txt" />
-    <Text Include="leve01.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="fonts\halfelven.ttf" />
