@@ -18,7 +18,7 @@ private:
 	std::string mLevelPath{};
 	EntityManager mEntites;
 	std::shared_ptr<Entity> mPlayer;
-	vec2 mGridSize{64.f, 64.f};
+	vec2 mGridSize{ 64.f, 64.f };
 	bool mDebugGrid{ false };
 	bool mRenderTexture{ true };
 	bool mRenderCollision{ false };

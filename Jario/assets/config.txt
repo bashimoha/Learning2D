@@ -1,0 +1,52 @@
+Font LevelFont assets\fonts\menu.ttf
+Font JarioFont assets\fonts\jario.ttf
+Font Arial assets\fonts\arial.ttf
+Texture menu_background assets\texture\menu_background.png
+Texture TexBlock assets\texture\block.png
+Texture TexBrick assets\texture\brick.png
+Texture TexSmallCloud assets\texture\cloud.png
+Texture TexcloudBig assets\texture\triplecloud.png
+Texture TexDoubleBush assets\texture\doublebush.png
+Texture TexFlag assets\texture\flag.png
+Texture TexGoombaWalk assets\texture\GoombaWalk.png
+Texture TexGround assets\texture\ground.png
+Texture TexJump16 assets\texture\jump16.png
+Texture TexJump64 assets\texture\jump64.png
+Texture TexMushroom assets\texture\Mushroom.png
+Texture TexPipe assets\texture\pipe.png
+Texture TexSingleBush assets\texture\singbush.png
+Texture TexStand16 assets\texture\stand16.png
+Texture TexStand64 assets\texture\stand64.png
+Texture TexQuestionBlock assets\texture\questionblock.png
+Texture TexTripleBush assets\texture\triplebush.png
+Texture TexSmallHill assets\texture\hill.png
+Texture TexLargeHill assets\texture\largehill.png
+Texture TexGiantMushroom assets\texture\GiantMushroom.png
+Texture TexFlagPole assets\texture\flagpole.png
+Texture TexWalking assets\texture\walking.png
+Texture TexCoin assets\texture\coin.png
+Texture TexBrokenBrick assets\texture\brokenbrick.png
+Animation Block TexBlock 1 0
+Animation Brick TexBrick 1 0
+Animation SmallCloud TexSmallCloud 1 0
+Animation DoubleBush TexDoubleBush 1 0
+Animation Flag TexFlag 1 0
+Animation GoombaWalk TexGoombaWalk 2 10
+Animation Ground TexGround 1 0
+Animation Jump16 TexJump16 1 0
+Animation Jump64 TexJump64 1 0
+Animation Mushroom TexMushroom 1 0
+Animation PipeTall TexPipe 1 0
+Animation SingleBush TexSingleBush 1 0
+Animation Stand16 TexStand16 1 0
+Animation Stand64 TexStand64 1 0
+Animation TripleBush TexTripleBush 1 0
+Animation Question TexQuestionBlock 4 20
+Animation CloudBig TexcloudBig 1 0
+Animation Hill TexSmallHill 1 0
+Animation LargeHill TexLargeHill 1 0
+Animation GiantMushroom TexGiantMushroom 1 0
+Animation FlagPole TexFlagPole 1 0
+Animation MarioWalking TexWalking 3 3
+Animation Coin TexCoin 5 20
+Animation BrokenBrick TexBrokenBrick 4 10

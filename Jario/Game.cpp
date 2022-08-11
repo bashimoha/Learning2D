@@ -1,7 +1,6 @@
-#include "GameScene.h"
+#include "Game.h"
 
-
-GameScene::GameScene(Engine* engine, const std::string& level_path )
+GameScene::GameScene(Engine* engine, const std::string& level_path)
 	:Scene(engine), mLevelPath(level_path)
 {
 	Init(mLevelPath);
@@ -48,18 +47,18 @@ void GameScene::Render()
 		//make each line a red line
 		line[0].color = sf::Color::Magenta;
 		line[1].color = sf::Color::Magenta;
-		
+
 		window.draw(line, 2, sf::Lines);
 	};
-	
+
 	mGame->Window().clear(sf::Color(100, 100, 255));
 	//reset the view depeneding on player's pos
 	auto& transform = mPlayer->getComponent<CTransform>();
-	auto window_size_x = std::max((float)mGame->Window().getSize().x/2, transform.position.x);
+	auto window_size_x = std::max((float)mGame->Window().getSize().x / 2, transform.position.x);
 	auto view = mGame->Window().getView();
 	view.setCenter(window_size_x, mGame->Window().getSize().y - view.getCenter().y);
 	mGame->Window().setView(view);
-	
+
 	if (mRenderTexture)
 	{
 		for (auto e : mEntites.getEntities())
@@ -81,7 +80,7 @@ void GameScene::Render()
 		float leftX = mGame->Window().getView().getCenter().x - width / 2;
 		float rightX = leftX + width + mGridSize.x;
 		float nextGridX = leftX - ((int)leftX % (int)mGridSize.x);
-		
+
 		for (float x = nextGridX; x < rightX; x += mGridSize.x)
 		{
 			drawLine(vec2(x, 0), vec2(x, height), mGame->Window());
@@ -95,7 +94,7 @@ void GameScene::Render()
 				std::string yCell = std::to_string((int)y / (int)mGridSize.y);
 				sf::Text t;
 				t.setFont(mGame->GetAsset().getFont("Arial"));
-				t.setString( xCell + "," + yCell);
+				t.setString(xCell + "," + yCell);
 				t.setPosition(x + 3, height - y - mGridSize.y + 2);
 				t.setCharacterSize(12);
 				mGame->Window().draw(t);
@@ -106,7 +105,7 @@ void GameScene::Render()
 	{
 		for (auto e : mEntites.getEntities())
 		{
-			
+
 			if (e->hasComponent<CBoundingBox>())
 			{
 				auto& t = e->getComponent<CTransform>();
@@ -195,7 +194,7 @@ void GameScene::Movementent()
 	//move player
 	auto& input = mPlayer->getComponent<CInput>();
 	auto& transform = mPlayer->getComponent<CTransform>();
-	transform.prev_position  = transform.position;
+	transform.prev_position = transform.position;
 	vec2 velocity(0, 0);
 	//maybe we shouldn't change the animation here and do it in the animation system but naah too lazy
 	auto& s = mPlayer->getComponent<CState>();
@@ -284,7 +283,7 @@ void GameScene::LoadLevel(const std::string& level_path)
 			e->addComponent<CTransform>(grid_to_world_point(x, y, e), vec2(0.f, 0.f), 1);
 		}
 	}
-	
+
 }
 //convert level postion to world position (pixels)
 vec2 GameScene::grid_to_world_point(float x, float y, std::shared_ptr<Entity> entity)
@@ -307,7 +306,7 @@ void GameScene::SpawnPlayer()
 	entity->addComponent<CState>();
 	entity->addComponent<CInput>();
 	entity->addComponent<CGravity>(3.f);
-	
+
 	mPlayer = entity;
 }
 
@@ -319,7 +318,7 @@ void GameScene::SpawnCoin(const std::shared_ptr<Entity>& e)
 	auto x = e->getComponent<CTransform>().position.x;
 	auto y = e->getComponent<CTransform>().position.y;
 	//spawn the coin above the e's position
-	coin->addComponent<CTransform>(vec2(x, y - (mGridSize.y+10)), vec2(0, 0), 1);
+	coin->addComponent<CTransform>(vec2(x, y - (mGridSize.y + 10)), vec2(0, 0), 1);
 	coin->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Coin"), true);
 	coin->addComponent<CBoundingBox>(
 		coin->getComponent<CAnimation>().animation.GetSize());
@@ -335,7 +334,7 @@ void GameScene::SpawnBrokenBrick(const std::shared_ptr<Entity>& e)
 	auto x = e->getComponent<CTransform>().position.x;
 	auto y = e->getComponent<CTransform>().position.y;
 	//spawn the coin above the e's position
-	brick->addComponent<CTransform>(vec2(x,  y), vec2(0, 0), 1);
+	brick->addComponent<CTransform>(vec2(x, y), vec2(0, 0), 1);
 	brick->addComponent<CAnimation>(mGame->GetAsset().getAnimation("BrokenBrick"), false);
 	brick->addComponent<CBoundingBox>(
 		brick->getComponent<CAnimation>().animation.GetSize());
@@ -409,7 +408,7 @@ void GameScene::Collision()
 							SpawnBrokenBrick(e);
 							e->destroy();
 						}
-						
+
 					}
 				}
 				transform.position = transform.prev_position;
@@ -424,7 +423,7 @@ void GameScene::Collision()
 			}
 		}
 	}
-	
+
 }
 
 void GameScene::sAnimation()
@@ -453,7 +452,7 @@ void GameScene::sAnimation()
 				else {
 					animation_component.animation.Update();
 				}
-					
+
 			}
 		}
 	}

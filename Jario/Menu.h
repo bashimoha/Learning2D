@@ -13,7 +13,7 @@ private:
 	int mIndex{};
 	std::vector<std::string> mLevelPaths{};
 	std::vector<sf::Text> mLevelNames{};
-	std::string mTitle{""};
+	std::string mTitle{ "" };
 	sf::Font menu_font;
 	sf::Text mTitleText;
 	sf::Text mInstruction;

@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "MenuScene.h"
 Engine::Engine(const std::string& path)
 {
 	Init(path);
@@ -11,7 +10,7 @@ void Engine::Init(const std::string& path)
 	mWindow.setFramerateLimit(60);
 	mAssets.LoadFromFile(path);
 	//change to the entry point: maybe a better way is to add the scene and then change it. SO, that the engine don't know anything thing about the 
-	ChangeScene("Fart", std::make_shared<Menu>(this));
+	//ChangeScene("Fart", std::make_shared<Menu>(this));
 }
 
 void Engine::Update()
