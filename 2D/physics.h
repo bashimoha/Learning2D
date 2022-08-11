@@ -3,7 +3,7 @@
 #include "Entity.h"
 
 //calculates the overlap between two entities using current position
-vec2 collision_overlap(const std::shared_ptr<Entity> e1, const std::shared_ptr<Entity> e2, bool use_prev_position);
+bool collision_overlap(const std::shared_ptr<Entity> e1, const std::shared_ptr<Entity> e2, bool use_prev_position, vec2& overlap);
 //{
 //	auto e1_pos = e1->getComponent<CTransform>().position;
 //	auto e2_pos = e2->getComponent<CTransform>().position;

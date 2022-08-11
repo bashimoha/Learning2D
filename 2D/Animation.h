@@ -8,10 +8,13 @@ public:
 	Animation(const std::string& name, const sf::Texture& texture);
 	Animation(const std::string& name, const sf::Texture& texture, size_t frameCount, float speed);
 	void Update();
+	void SetFrame(size_t frame);
 	bool IsDone() const;
 	std::string GetName();
 	vec2 GetSize() const;
 	sf::Sprite& GetSprite();
+	size_t GetFrameCount() const;
+	
 	
 private:
 	std::string mName;

@@ -24,6 +24,8 @@ Texture TexLargeHill assets\images\largehill.png
 Texture TexGiantMushroom assets\images\GiantMushroom.png
 Texture TexFlagPole assets\images\flagpole.png
 Texture TexWalking assets\images\walking.png
+Texture TexCoin assets\images\coin.png
+Texture TexBrokenBrick assets\images\brokenbrick.png
 Animation Block TexBlock 1 0
 Animation Brick TexBrick 1 0
 Animation SmallCloud TexSmallCloud 1 0
@@ -39,10 +41,12 @@ Animation SingleBush TexSingleBush 1 0
 Animation Stand16 TexStand16 1 0
 Animation Stand64 TexStand64 1 0
 Animation TripleBush TexTripleBush 1 0
-Animation Question TexQuestionBlock 4 3
+Animation Question TexQuestionBlock 4 20
 Animation CloudBig TexcloudBig 1 0
 Animation Hill TexSmallHill 1 0
 Animation LargeHill TexLargeHill 1 0
 Animation GiantMushroom TexGiantMushroom 1 0
 Animation FlagPole TexFlagPole 1 0
-Animation Walking TexWalking 3 10
+Animation MarioWalking TexWalking 3 3
+Animation Coin TexCoin 5 20
+Animation BrokenBrick TexBrokenBrick 4 10

@@ -12,10 +12,10 @@ class CTransform: public Component
 {
 public:
 	CTransform() = default;
-	vec2 position{}, velocity{}, prev_position{};
+	vec2 position{}, velocity{}, prev_position{}, scale{};
 	float angle;
-	CTransform(const vec2& pos, const vec2& vel, float ang) 
-		:position(pos), velocity(vel), angle(ang) {}
+	CTransform(const vec2& pos, const vec2& vel, float ang)
+		:position(pos), velocity(vel), angle(ang), scale({ 1,1}), prev_position(pos) {}
 };
 class CInput : public Component
 {
@@ -36,7 +36,9 @@ class CGravity : public Component
 {
 public:
 	CGravity() {}
+	CGravity(float gravity) :gravity(gravity), gravity_velocity(gravity) {}
 	float gravity{ 0.f };
+	float gravity_velocity{ 0.f };
 };
 
 class CBoundingBox :public Component

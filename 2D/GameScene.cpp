@@ -1,5 +1,6 @@
 #include "GameScene.h"
 
+
 GameScene::GameScene(Engine* engine, const std::string& level_path )
 	:Scene(engine), mLevelPath(level_path)
 {
@@ -21,56 +22,8 @@ void GameScene::Init(const std::string& level)
 	registerAction(sf::Keyboard::P, "Pause");
 
 	mEntites = EntityManager();
-	std::ifstream file(level);
-
-	if (!file.is_open())
-	{
-		std::cout << level <<"Could not open file" << std::endl;
-		return;
-	}
-	auto grid_to_world_point = [](float x, float y, std::shared_ptr<Entity> entity, sf::RenderWindow& window)
-	{
-	
-		int width = window.getSize().x;
-		int height = window.getSize().y;
-		int grid_size = 64;
-		auto size = entity->getComponent<CAnimation>().animation.GetSize();
-		auto x_pos = grid_size * x;
-		auto y_pos = y*size.y + (size.y / 2);
-		return vec2(x_pos+ grid_size/2, height-y_pos);
-		
-	};
-	std::string type;
-	while (file.good())
-	{
-		std::string name;
-		float x, y;
-		file >>type>> name >> x >> y;
-		if (type == "Tile")
-		{
-			//example of a tile: Tile Ground 0 0
-				auto e = mEntites.addEntity(type);
-				e->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
-				e->addComponent<CTransform>(grid_to_world_point(x, y, e, mGame->Window()), vec2(0.f,0.f), 1);
-				e->addComponent<CBoundingBox>(
-					e->getComponent<CAnimation>().animation.GetSize());
-		}
-		else if (type == "Dec")
-		{
-			auto e = mEntites.addEntity(type);
-			e->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
-			e->addComponent<CTransform>(grid_to_world_point(x, y, e, mGame->Window()), vec2(0.f, 0.f), 1);
-		}
-		//mEnities.update();
-	}
-	auto entity = mEntites.addEntity("Player");
-	entity->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Walking"), true);
-	entity->addComponent<CTransform>(vec2(244, 244), vec2(0, 0), 1);
-	entity->addComponent<CBoundingBox>(
-		entity->getComponent<CAnimation>().animation.GetSize());
-	entity->addComponent<CState>();
-	mPlayer = entity;
-	
+	LoadLevel(level);
+	SpawnPlayer();
 }
 
 
@@ -78,8 +31,9 @@ void GameScene::Update()
 {
 	mEntites.update();
 	Movementent();
-	sAnimation();
 	Collision();
+	sAnimation();
+	mCurrentFrame++;
 }
 
 void GameScene::Render()
@@ -111,7 +65,6 @@ void GameScene::Render()
 		for (auto e : mEntites.getEntities())
 		{
 			auto& t = e->getComponent<CTransform>();
-			//std::cout << e->Tag() << ":(" << t.position.x << "," << t.position.y << ")\n";
 			if (e->hasComponent<CAnimation>())
 			{
 				auto& entity = e->getComponent<CAnimation>();
@@ -173,8 +126,9 @@ void GameScene::Render()
 					mGame->Window().draw(rect);
 					continue;
 				}
-				auto overlap = collision_overlap(e, mPlayer, false);
-				if (overlap.x < 0 && overlap.y < 0)
+				vec2 overlap;
+				bool collided = collision_overlap(mPlayer, mPlayer, false, overlap);
+				if (!collided)
 				{
 					rect.setFillColor(sf::Color(255, 0, 0));
 					rect.setOutlineColor(sf::Color::Red);
@@ -205,17 +159,12 @@ void GameScene::DoAction(const Action& action)
 		else if (name == "Quit") { mGame->Quit(); }
 		else if (name == "UP") {
 			mPlayer->getComponent<CInput>().up = true;
-			mPlayer->getComponent<CState>().state = "jump";
 		}
 		else if (name == "Right") {
 			mPlayer->getComponent<CInput>().right = true;
-			mPlayer->getComponent<CState>().state = "walk";
-			mPlayer->getComponent<CAnimation>().animation.GetSprite().setScale(1, 1);
 		}
 		else if (name == "Left") {
 			mPlayer->getComponent<CInput>().left = true;
-			mPlayer->getComponent<CState>().state = "walk";
-			mPlayer->getComponent<CAnimation>().animation.GetSprite().setScale(-1, 1);
 		}
 		else if (name == "Down") {
 			mPlayer->getComponent<CInput>().down = true;
@@ -248,23 +197,53 @@ void GameScene::Movementent()
 	auto& transform = mPlayer->getComponent<CTransform>();
 	transform.prev_position  = transform.position;
 	vec2 velocity(0, 0);
-	if (input.up)
+	//maybe we shouldn't change the animation here and do it in the animation system but naah too lazy
+	auto& s = mPlayer->getComponent<CState>();
+	if (input.up && !input.right && !input.left)
 	{
-		velocity.y -= 3;
-
+		//check if already in air
+		if (transform.velocity.y >= 0 || s.state != "Jumping")
+		{
+			velocity.y -= 32;
+		}
+		if (s.state != "Jumping")
+		{
+			s.state = "Jumping";
+			mPlayer->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Jump64"), true);
+		}
+		auto& g = mPlayer->getComponent<CGravity>();
+		g.gravity = g.gravity_velocity;
 	}
 	if (input.right)
 	{
-		velocity.x += 3;
+		velocity.x += 4; // idk why this is 4 but it is
+
+		transform.scale = vec2(1, 1);
+		if (s.state != "Walking")
+		{
+			s.state = "Walking";
+			mPlayer->addComponent<CAnimation>(mGame->GetAsset().getAnimation("MarioWalking"), true);
+		}
 	}
 	if (input.left)
 	{
-		velocity.x -= 3;
+		velocity.x -= 4; // idk why this is 4 but it is
+		transform.scale = vec2(-1, 1);
+		if (s.state != "Walking")
+		{
+			s.state = "Walking";
+			mPlayer->addComponent<CAnimation>(mGame->GetAsset().getAnimation("MarioWalking"), true);
+		}
 	}
-	if (input.down)
+	if (!input.left && !input.right && !input.up && mPlayer->getComponent<CGravity>().gravity != 3)
 	{
-		velocity.y += 3;
+		mPlayer->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Stand64"), true);
+		s.state = "Standing";
 	}
+	//apply gravity to the y velocity
+	velocity.y += mPlayer->getComponent<CGravity>().gravity;
+	//apply friction of 0.9 to the x component of player
+	velocity.x *= 0.9f;
 	transform.velocity = velocity;
 	transform.position += transform.velocity;
 }
@@ -273,11 +252,101 @@ void GameScene::EnemySpawner()
 {
 }
 
+void GameScene::LoadLevel(const std::string& level_path)
+{
+	std::ifstream file(level_path);
+
+	if (!file.is_open())
+	{
+		std::cout << level_path << "Could not open file" << std::endl;
+		return;
+	}
+
+	std::string type;
+	while (file.good())
+	{
+		std::string name;
+		float x, y;
+		file >> type >> name >> x >> y;
+		if (type == "Tile")
+		{
+			//example of a tile: Tile Ground 0 0
+			auto e = mEntites.addEntity(type);
+			e->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
+			e->addComponent<CTransform>(grid_to_world_point(x, y, e), vec2(0.f, 0.f), 1);
+			e->addComponent<CBoundingBox>(
+				e->getComponent<CAnimation>().animation.GetSize());
+		}
+		else if (type == "Dec")
+		{
+			auto e = mEntites.addEntity(type);
+			e->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
+			e->addComponent<CTransform>(grid_to_world_point(x, y, e), vec2(0.f, 0.f), 1);
+		}
+	}
+	
+}
+//convert level postion to world position (pixels)
+vec2 GameScene::grid_to_world_point(float x, float y, std::shared_ptr<Entity> entity)
+{
+	int width = mGame->Window().getSize().x;
+	int height = mGame->Window().getSize().y;
+	auto size = entity->getComponent<CAnimation>().animation.GetSize();
+	auto x_pos = mGridSize.x * x;
+	auto y_pos = y * size.y + (size.y / 2);
+	return vec2(x_pos + mGridSize.x / 2, height - y_pos);
+}
+
+void GameScene::SpawnPlayer()
+{
+	auto entity = mEntites.addEntity("Player");
+	entity->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Stand64"), true);
+	entity->addComponent<CTransform>(vec2(244, 244), vec2(0, 0), 1);
+	entity->addComponent<CBoundingBox>(
+		entity->getComponent<CAnimation>().animation.GetSize());
+	entity->addComponent<CState>();
+	entity->addComponent<CInput>();
+	entity->addComponent<CGravity>(3.f);
+	
+	mPlayer = entity;
+}
+
+//generate coin above e's position+gridSize
+void GameScene::SpawnCoin(const std::shared_ptr<Entity>& e)
+{
+	auto coin = mEntites.addEntity("Coin");
+	//print the e's position
+	auto x = e->getComponent<CTransform>().position.x;
+	auto y = e->getComponent<CTransform>().position.y;
+	//spawn the coin above the e's position
+	coin->addComponent<CTransform>(vec2(x, y - (mGridSize.y+10)), vec2(0, 0), 1);
+	coin->addComponent<CAnimation>(mGame->GetAsset().getAnimation("Coin"), true);
+	coin->addComponent<CBoundingBox>(
+		coin->getComponent<CAnimation>().animation.GetSize());
+}
+
+
+
+//try to spawn broken bricks ontop of current brick
+void GameScene::SpawnBrokenBrick(const std::shared_ptr<Entity>& e)
+{
+	auto brick = mEntites.addEntity("BrokenBrick");
+	//print the e's position
+	auto x = e->getComponent<CTransform>().position.x;
+	auto y = e->getComponent<CTransform>().position.y;
+	//spawn the coin above the e's position
+	brick->addComponent<CTransform>(vec2(x,  y), vec2(0, 0), 1);
+	brick->addComponent<CAnimation>(mGame->GetAsset().getAnimation("BrokenBrick"), false);
+	brick->addComponent<CBoundingBox>(
+		brick->getComponent<CAnimation>().animation.GetSize());
+}
+
 void GameScene::Collision()
 {
 	//do some simple AABB collision detection between mPlayer and every other entity that has a CBoundingBox component
 	auto& transform = mPlayer->getComponent<CTransform>();
-	for (const auto& e : mEntites.getEntities())
+	auto& g = mPlayer->getComponent<CGravity>();
+	for (const auto& e : mEntites.getEntities("Tile"))
 	{
 		if (e->Tag() == "Player")
 		{
@@ -285,13 +354,74 @@ void GameScene::Collision()
 		}
 		if (e->hasComponent<CBoundingBox>())
 		{
-
-			const auto overlap = collision_overlap(e, mPlayer, false);
-			if (overlap.x < 0 && overlap.y < 0)
+			vec2 overlap;
+			auto collided = collision_overlap(e, mPlayer, false, overlap);
+			if (collided)
 			{
+				vec2 previous_overlap;
+				auto c = collision_overlap(e, mPlayer, true, previous_overlap);
+				auto& animation = e->getComponent<CAnimation>().animation;
+				if (previous_overlap.y > 0)
+				{
+				}
+				if (previous_overlap.x > 0)
+				{
+					//if it's y is higher it come from the top
+					if (transform.position.y < e->getComponent<CTransform>().position.y)
+					{
+						//set gravity to 0
+						g.gravity = 0;
+						if (animation.GetName() == "Question")
+						{
+							//try to destroy the coin if it's a question block
+							try {
+								auto coins = mEntites.getEntities("Coin");
+								for (auto& coin : coins) {
+									//if the coin is above the question block and they have the same x's then destroy the coin
+									auto coin_pos = coin->getComponent<CTransform>().position;
+									auto question_pos = e->getComponent<CTransform>().position;
+									if (coin_pos.y < question_pos.y && coin_pos.x == question_pos.x) {
+										coin->destroy();
+									}
+								}
+							}
+							catch (std::exception& e)
+							{
+								std::cout << e.what() << std::endl;
+							}
+						}
+					}
+					else
+					{
+						//set gravity to 3
+						g.gravity = 3;
+						//get e's animation name
+						// spawn a Coin  gridSize.y above the question block
+						if (animation.GetName() == "Question" && animation.GetFrameCount() != 1)
+						{
+							//set the animation to the first frame
+							animation.SetFrame(1);
+							SpawnCoin(e);
+						}
+						//if name is "Brick" spawn broken brick and destory the current brick
+						if (animation.GetName() == "Brick")
+						{
+							SpawnBrokenBrick(e);
+							e->destroy();
+						}
+						
+					}
+				}
 				transform.position = transform.prev_position;
 			}
-
+			if (!collided)
+			{
+				//if state is idle set gravity to 3
+				if (mPlayer->getComponent<CState>().state == "Standing")
+				{
+					g.gravity = 3;
+				}
+			}
 		}
 	}
 	
@@ -299,14 +429,32 @@ void GameScene::Collision()
 
 void GameScene::sAnimation()
 {
-	//update players' animation based on state
-	auto& state = mPlayer->getComponent<CState>();
-	auto& animation = mPlayer->getComponent<CAnimation>();
+	//update animations for all entities that have a CAnimation component
 	for (auto& e : mEntites.getEntities())
 	{
 		if (e->hasComponent<CAnimation>())
 		{
-			e->getComponent<CAnimation>().animation.Update();
+			//get the current animation
+			auto& animation_component = e->getComponent<CAnimation>();
+			if (animation_component.repeat)
+			{
+				auto scale = e->getComponent<CTransform>().scale;
+				animation_component.animation.GetSprite().setScale(
+					scale.x, scale.y
+				);
+				animation_component.animation.Update();
+			}
+			else
+			{
+				if (animation_component.animation.IsDone())
+				{
+					e->destroy();
+				}
+				else {
+					animation_component.animation.Update();
+				}
+					
+			}
 		}
 	}
 

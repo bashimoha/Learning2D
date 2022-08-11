@@ -27,7 +27,11 @@ private:
 	//movement
 	void Movementent();
 	void EnemySpawner();
-	
-	
+
+	void LoadLevel(const std::string& level_path);
+	vec2 grid_to_world_point(float x, float y, std::shared_ptr<Entity> entity);
+	void SpawnPlayer();
+	void SpawnCoin(const std::shared_ptr<Entity>& e);
+	void SpawnBrokenBrick(const std::shared_ptr<Entity>& e);
 };
 

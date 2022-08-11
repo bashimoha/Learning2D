@@ -25,11 +25,15 @@ void Animation::Update()
 	//there is a bug somewhere in the code where I called the default constructor and it create an animation without any frame
 	if (mTotalFrames == 0)
 		return;
-	mDone = ++mCurrentFrame > mTotalFrames;
 	mSpeed = mSpeed <1  ? 1 : mSpeed;
+	mDone = ++mCurrentFrame > mTotalFrames;
 	auto frame = (mCurrentFrame / mSpeed) % mTotalFrames;
-	sf::IntRect rect = sf::IntRect(std::floor(frame)*mSize.x, 0, mSize.x, mSize.y);
+	sf::IntRect rect = sf::IntRect(frame*mSize.x, 0, mSize.x, mSize.y);
 	mSprite.setTextureRect(rect);
+}
+void Animation::SetFrame(size_t frame)
+{
+	mTotalFrames = frame;
 }
 bool Animation::IsDone() const
 {
@@ -49,4 +53,9 @@ vec2 Animation::GetSize() const
 sf::Sprite& Animation::GetSprite()
 {
 	return mSprite;
+}
+
+size_t Animation::GetFrameCount() const
+{
+	return mTotalFrames;
 }

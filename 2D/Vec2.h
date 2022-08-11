@@ -110,8 +110,8 @@ public:
 		return x > rhs.x && y > rhs.y;
 	}
 public:
-    T x;
-    T y;
+    T x{};
+    T y{};
 };
 
 typedef _Vec2<float> vec2;
