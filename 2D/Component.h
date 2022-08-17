@@ -67,7 +67,13 @@ class CState :public Component
 		CState() = default;
 		std::string state{ "standing" };
 };
-	
+class CDraggable: public Component
+{
+	public:
+	CDraggable() = default;
+	bool dragging{ false };
+	bool dublicate{ false };
+};
 
 #if 0
 class CShape : Component

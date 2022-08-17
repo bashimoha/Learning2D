@@ -5,6 +5,7 @@ GameScene::GameScene(Engine* engine, const std::string& level_path)
 {
 	Init(mLevelPath);
 	mGame->Window().setTitle("Fart Scene");
+	
 }
 void GameScene::Init(const std::string& level)
 {
@@ -19,7 +20,17 @@ void GameScene::Init(const std::string& level)
 	registerAction(sf::Keyboard::G, "Grid");
 	registerAction(sf::Keyboard::C, "Collision");
 	registerAction(sf::Keyboard::P, "Pause");
+	registerAction(sf::Keyboard::K, "Duplicate");
 
+
+	//set the mMouseCursor circle to some default values
+	mMouseCursor.setRadius(10.0f);
+	mMouseCursor.setPointCount(40);
+	mMouseCursor.setFillColor(sf::Color::Red);
+	mMouseCursor.setOrigin(mMouseCursor.getRadius(), mMouseCursor.getRadius());
+	auto pos = sf::Mouse::getPosition();
+	mMouseCursor.setPosition(sf::Vector2f(pos.x, pos.y));
+	mMouseCursor.setOutlineColor(sf::Color::Black);
 	mEntites = EntityManager();
 	LoadLevel(level);
 	SpawnPlayer();
@@ -143,6 +154,8 @@ void GameScene::Render()
 			}
 		}
 	}
+	// draw the mouse cursor
+	mGame->Window().draw(mMouseCursor);
 }
 
 void GameScene::DoAction(const Action& action)
@@ -155,7 +168,11 @@ void GameScene::DoAction(const Action& action)
 		else if (name == "Grid") { mDebugGrid = !mDebugGrid; }
 		else if (name == "Collision") { mRenderCollision = !mRenderCollision; }
 		else if (name == "Pause") { mPause = true; }
-		else if (name == "Quit") { mGame->Quit(); }
+		else if (name == "Quit") {
+			//save the game
+			SaveLevel(mLevelPath);
+			mGame->Quit(); 
+		}
 		else if (name == "UP") {
 			mPlayer->getComponent<CInput>().up = true;
 		}
@@ -168,8 +185,39 @@ void GameScene::DoAction(const Action& action)
 		else if (name == "Down") {
 			mPlayer->getComponent<CInput>().down = true;
 		}
+		if (name == "LeftClick")
+		{
+			//set the dragging to true for the first entity with Dragable component
+			for (auto e : mEntites.getEntities())
+			{
+				if (e->hasComponent<CDraggable>())
+				{
+					if (point_inside_entity(vec2(mMouseCursor.getPosition().x, mMouseCursor.getPosition().y), e))
+					{
+						e->getComponent<CDraggable>().dragging = true;
+						break;
+					}
+				
+				}
+			}
+		}
+		if (name == "Duplicate")
+		{
+			for (auto e : mEntites.getEntities())
+			{
+				if (e->hasComponent<CDraggable>())
+				{
+					if (point_inside_entity(vec2(mMouseCursor.getPosition().x, mMouseCursor.getPosition().y), e))
+					{
+						e->getComponent<CDraggable>().dublicate = true;
+						break;
+					}
+
+				}
+			}
+		}
 	}
-	else
+	if (type == "END")
 	{
 		if (name == "UP") {
 			mPlayer->getComponent<CInput>().up = false;
@@ -183,8 +231,56 @@ void GameScene::DoAction(const Action& action)
 		else if (name == "Down") {
 			mPlayer->getComponent<CInput>().down = false;
 		}
-		else
+		if (name == "LeftClick")
 		{
+			//set the dragging to false for all entities with Dragable component
+			for (auto e : mEntites.getEntities())
+			{
+				if (e->hasComponent<CDraggable>())
+				{
+					e->getComponent<CDraggable>().dragging = false;
+				}
+			}
+		}
+		if (name == "Duplicate")
+		{
+			for (auto e : mEntites.getEntities())
+			{
+				if (e->hasComponent<CDraggable>() && e->getComponent<CDraggable>().dublicate)
+				{
+					e->getComponent<CDraggable>().dublicate = false;
+					// create a new copy of the current entity
+					auto n = mEntites.addEntity( e->Tag() );
+					
+					 Entity::CopyComponentFrom(e, n);
+					 break;
+				}
+			}
+		}
+		
+	}
+	if (type == "MOUSEMOVE")
+	{
+		const auto pos = action.Position();
+		const auto mouse_pos = sf::Vector2i(pos.x, pos.y);
+		//update the mouse cursor position based on the view
+		const auto delta = mGame->Window().mapPixelToCoords(mouse_pos) - mMouseCursor.getPosition();
+		//set the mouse cursor position to the new position
+		mMouseCursor.setPosition(mMouseCursor.getPosition() + delta);
+
+
+		// if the mouse is over an entity with a draggable component, update the position of the entity
+		for (auto e : mEntites.getEntities())
+		{
+			if (e->hasComponent<CDraggable>())
+			{
+				if (e->getComponent<CDraggable>().dragging)
+				{
+					const auto pos = mMouseCursor.getPosition();
+					e->getComponent<CTransform>().position = vec2(pos.x, pos.y);
+					break;
+				}
+			}
 		}
 	}
 }
@@ -275,12 +371,14 @@ void GameScene::LoadLevel(const std::string& level_path)
 			e->addComponent<CTransform>(grid_to_world_point(x, y, e), vec2(0.f, 0.f), 1);
 			e->addComponent<CBoundingBox>(
 				e->getComponent<CAnimation>().animation.GetSize());
+			e->addComponent<CDraggable> ();
 		}
 		else if (type == "Dec")
 		{
 			auto e = mEntites.addEntity(type);
 			e->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
 			e->addComponent<CTransform>(grid_to_world_point(x, y, e), vec2(0.f, 0.f), 1);
+			e->addComponent<CDraggable>();
 		}
 	}
 
@@ -294,6 +392,39 @@ vec2 GameScene::grid_to_world_point(float x, float y, std::shared_ptr<Entity> en
 	auto x_pos = mGridSize.x * x;
 	auto y_pos = y * size.y + (size.y / 2);
 	return vec2(x_pos + mGridSize.x / 2, height - y_pos);
+}
+// convert all the entity position to a level postion for saving
+// in the format TYPE NAME X Y where x, y is the position in the level grid
+std::string GameScene::world_to_grid_point(std::shared_ptr<Entity> entity)
+{
+	std::stringstream ss;
+	int width = mGame->Window().getSize().x;
+	int height = mGame->Window().getSize().y;
+	auto animation = entity->getComponent<CAnimation>().animation;
+	auto size = animation.GetSize();
+	auto& transform = entity->getComponent<CTransform>();
+	auto x_pos = (transform.position.x - (size.x / 2)) / mGridSize.x;
+	auto y_pos = (height - transform.position.y - (size.y / 2)) / mGridSize.y;
+	
+	ss << entity->Tag()<< " " <<animation.GetName() << " " << x_pos << " " << y_pos;
+	return ss.str();
+}
+
+void GameScene::SaveLevel(const std::string& level_path)
+{
+	//create new file and write to it
+	auto new_file = "save.txt";
+	std::ofstream file(new_file, std::ios_base::out);
+	if (!file.is_open())
+	{
+		std::cout << "Could not open file" << std::endl;
+		return;
+	}
+	for (auto& e : mEntites.getEntities())
+	{
+		file << world_to_grid_point( e) << std::endl;
+	}
+	file.close();
 }
 
 void GameScene::SpawnPlayer()
@@ -309,7 +440,6 @@ void GameScene::SpawnPlayer()
 
 	mPlayer = entity;
 }
-
 //generate coin above e's position+gridSize
 void GameScene::SpawnCoin(const std::shared_ptr<Entity>& e)
 {
@@ -323,8 +453,6 @@ void GameScene::SpawnCoin(const std::shared_ptr<Entity>& e)
 	coin->addComponent<CBoundingBox>(
 		coin->getComponent<CAnimation>().animation.GetSize());
 }
-
-
 
 //try to spawn broken bricks ontop of current brick
 void GameScene::SpawnBrokenBrick(const std::shared_ptr<Entity>& e)

@@ -18,3 +18,17 @@ bool collision_overlap(const std::shared_ptr<Entity> e1, const std::shared_ptr<E
 	overlap = { (x_overlap), (y_overlap) };
 	return (x_overlap > 0 && y_overlap > 0);
 }
+
+bool point_inside_entity(const vec2& point, const std::shared_ptr<Entity> e)
+{
+	auto& t = e->getComponent<CTransform>();
+	auto& entity = e->getComponent<CDraggable>();
+	auto bb = e->getComponent<CAnimation>().animation.GetSize();
+	sf::RectangleShape rect;
+	rect.setPosition(t.position.x, t.position.y);
+	rect.setSize(sf::Vector2f(bb.x, bb.y));
+	rect.setOrigin(
+		bb.x / 2,
+		bb.y / 2);
+	return rect.getGlobalBounds().contains(point.x, point.y);
+}

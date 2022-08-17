@@ -5,7 +5,7 @@
 class EntityManager; 
 
 //tuple of components maybe a better way?
-using ComponentTuple = std::tuple<CTransform, CGravity, CHealth,CInput, CBoundingBox, CState, CAnimation>
+using ComponentTuple = std::tuple<CTransform, CGravity, CHealth,CInput, CBoundingBox, CState, CAnimation, CDraggable>
 ;
 
 class Entity
@@ -36,6 +36,14 @@ public:
 		component.hasComponent = true;
 		return component;
 	}
+	//remove component
+	template <typename T>
+	void removeComponent()
+	{
+		auto& component = getComponent<T>();
+		component.hasComponent = false;
+	}
+	static void CopyComponentFrom(std::shared_ptr<Entity>, std::shared_ptr<Entity>);
 	
 private:
 	std::string mTag{"Default"};

@@ -4,15 +4,5 @@
 
 //calculates the overlap between two entities using current position
 bool collision_overlap(const std::shared_ptr<Entity> e1, const std::shared_ptr<Entity> e2, bool use_prev_position, vec2& overlap);
-//{
-//	auto e1_pos = e1->getComponent<CTransform>().position;
-//	auto e2_pos = e2->getComponent<CTransform>().position;
-//	auto e1_size = e1->getComponent<CBoundingBox>().size;
-//	auto e2_size = e2->getComponent<CBoundingBox>().size;
-//	
-//	vec2 delta = {std::abs(e1_pos.x - e2_pos.x), std::abs(e1_pos.y - e2_pos.y)};
-//	auto x_overlap = (e1_size.x/2 + e2_size.x/2) - delta.x;
-//	auto y_overlap = (e1_size.y/2 + e2_size.y/2) - delta.y;
-//	return {x_overlap, y_overlap};
-//}
-//calculate the overlap between two entities using previous position
+
+bool point_inside_entity(const vec2& point, const std::shared_ptr<Entity> e);

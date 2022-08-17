@@ -72,6 +72,68 @@ void Engine::Input()
 				}
 			}
 		}
+		//mouse press
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (mScenes.size() != 0)
+			{
+				//get vec2 of the mouse position
+				sf::Vector2i _mouse_pos = sf::Mouse::getPosition(mWindow);
+				vec2 mouse_pos = vec2(_mouse_pos.x, _mouse_pos.y);
+				switch (event.mouseButton.button)
+				{
+				case sf::Mouse::Left:
+					mScenes[mCurrentScene]->doAction(Action("LeftClick", "BEGIN", mouse_pos));
+					break;
+				case sf::Mouse::Right:
+					mScenes[mCurrentScene]->doAction(Action("RightClick", "BEGIN", mouse_pos));
+					break;
+				case sf::Mouse::Middle:
+					mScenes[mCurrentScene]->doAction(Action("MiddleClick", "BEGIN", mouse_pos));
+					break;
+				default:
+					break;
+				}
+				
+			}
+		}
+		//mouse release
+		if (event.type == sf::Event::MouseButtonReleased)
+		{
+			if (mScenes.size() != 0)
+			{
+				//get vec2 of the mouse position
+				sf::Vector2i _mouse_pos = sf::Mouse::getPosition(mWindow);
+				vec2 mouse_pos = vec2(_mouse_pos.x, _mouse_pos.y);
+				switch (event.mouseButton.button)
+				{
+				case sf::Mouse::Left:
+					mScenes[mCurrentScene]->doAction(Action("LeftClick", "END", mouse_pos));
+					break;
+				case sf::Mouse::Right:
+					mScenes[mCurrentScene]->doAction(Action("RightClick", "END", mouse_pos));
+					break;
+				case sf::Mouse::Middle:
+					mScenes[mCurrentScene]->doAction(Action("MiddleClick", "END", mouse_pos));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		
+		//mouse move
+		if (event.type == sf::Event::MouseMoved)
+		{
+			if (mScenes.size() != 0)
+			{
+				//get vec2 of the mouse position
+				sf::Vector2i _mouse_pos = sf::Mouse::getPosition(mWindow);
+				vec2 mouse_pos = vec2(_mouse_pos.x, _mouse_pos.y);
+				mScenes[mCurrentScene]->doAction(Action("MOUSEMOVE", mouse_pos));
+			}
+		}
 	}
 
 }
