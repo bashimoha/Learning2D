@@ -10,6 +10,9 @@ void Assets::addTexture(const std::string& name, const std::string& path, bool s
 	}
 	texture.setSmooth(smooth);
 	mTextures[name] = texture;
+	////////////////////////////
+	mTextureNames.push_back(name);
+	/////////////////////////////
 }
 
 void Assets::addFont(const std::string& name, const std::string& path)
@@ -20,11 +23,17 @@ void Assets::addFont(const std::string& name, const std::string& path)
 		std::cout << "Could not load font: " << path << std::endl;
 	}
 	mFonts[name] = font;
+	////////////////////////////
+	mFontNames.push_back(name);
+	/////////////////////////////
 }
 
 void Assets::addAnimation(const std::string& name, const sf::Texture& texture, size_t frameCount, float speed)
 {
 	mAnimation[name] = Animation(name, texture, frameCount, speed);
+	////////////////////////////
+	mAnimationNames.push_back(name);
+	/////////////////////////////
 }
 
 sf::Texture& Assets::getTexture(const std::string& name)
@@ -42,6 +51,23 @@ Animation& Assets::getAnimation(const std::string& name)
 {
 	return mAnimation[name];
 }
+
+const std::vector<std::string>& Assets::getTextureNames() const
+{
+	return mTextureNames;
+}
+
+
+const std::vector<std::string>& Assets::getFontNames() const
+{
+	return mFontNames;
+}
+
+const std::vector<std::string>& Assets::getAnimationNames() const
+{
+	return mAnimationNames;
+}
+
 
 void Assets::LoadFromFile(const std::string& path)
 {

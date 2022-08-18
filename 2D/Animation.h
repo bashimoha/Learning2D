@@ -24,5 +24,6 @@ private:
 	size_t mSpeed{ 0 };
 	bool mDone{ false };
 	sf::Sprite mSprite;
+	
 };
 

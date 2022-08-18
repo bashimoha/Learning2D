@@ -1,4 +1,3 @@
-#pragma once
 #include "Common.h"
 #include "Entity.h"
 #include "physics.h"
@@ -22,7 +21,6 @@ bool collision_overlap(const std::shared_ptr<Entity> e1, const std::shared_ptr<E
 bool point_inside_entity(const vec2& point, const std::shared_ptr<Entity> e)
 {
 	auto& t = e->getComponent<CTransform>();
-	auto& entity = e->getComponent<CDraggable>();
 	auto bb = e->getComponent<CAnimation>().animation.GetSize();
 	sf::RectangleShape rect;
 	rect.setPosition(t.position.x, t.position.y);

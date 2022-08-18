@@ -1,14 +1,21 @@
 #include "Engine.h"
+Engine::Engine(const std::string& path, const vec2 window_dim)
+	:mWindowWidth(window_dim.x), mWindowHeight(window_dim.y)
+{
+	Init(path);
+}
 Engine::Engine(const std::string& path)
 {
 	Init(path);
 }
 
+
 void Engine::Init(const std::string& path)
 {
-	mWindow.create(sf::VideoMode(1280, 704), "SFML Engine");
-	mWindow.setFramerateLimit(60);
+	mWindow.create(sf::VideoMode(mWindowWidth, mWindowHeight), "SFML Engine");
+	mWindow.setFramerateLimit(FPS);
 	mAssets.LoadFromFile(path);
+	ImGui::SFML::Init(mWindow);
 	//change to the entry point: maybe a better way is to add the scene and then change it. SO, that the engine don't know anything thing about the 
 	//ChangeScene("Fart", std::make_shared<Menu>(this));
 }
@@ -52,6 +59,7 @@ void Engine::Input()
 
 	while (mWindow.pollEvent(event))
 	{
+		ImGui::SFML::ProcessEvent(mWindow, event);
 		if (event.type == sf::Event::Closed)
 		{
 			Quit();
@@ -151,4 +159,5 @@ void Engine::Run()
 		}
 		mWindow.display();
 	}
+	ImGui::SFML::Shutdown();
 }

@@ -15,7 +15,7 @@ public:
 	vec2 position{}, velocity{}, prev_position{}, scale{};
 	float angle;
 	CTransform(const vec2& pos, const vec2& vel, float ang)
-		:position(pos), velocity(vel), angle(ang), scale({ 1,1}), prev_position(pos) {}
+		:position(pos), velocity(vel), prev_position(pos), scale({ 1,1 }), angle(ang){}
 };
 class CInput : public Component
 {
@@ -72,7 +72,7 @@ class CDraggable: public Component
 	public:
 	CDraggable() = default;
 	bool dragging{ false };
-	bool dublicate{ false };
+	bool duplicate{ false };
 };
 
 #if 0

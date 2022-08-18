@@ -92,14 +92,14 @@ void GameScene::Render()
 		float rightX = leftX + width + mGridSize.x;
 		float nextGridX = leftX - ((int)leftX % (int)mGridSize.x);
 
-		for (float x = nextGridX; x < rightX; x += mGridSize.x)
+		for (int x = nextGridX; x < rightX; x += mGridSize.x)
 		{
 			drawLine(vec2(x, 0), vec2(x, height), mGame->Window());
 		}
-		for (float y = 0; y < height; y += mGridSize.y)
+		for (int y = 0; y < height; y += mGridSize.y)
 		{
 			drawLine(vec2(leftX, height - y), vec2(rightX, height - y), mGame->Window());
-			for (float x = nextGridX; x < rightX; x += mGridSize.x)
+			for (int x = nextGridX; x < rightX; x += mGridSize.x)
 			{
 				std::string xCell = std::to_string((int)x / (int)mGridSize.x);
 				std::string yCell = std::to_string((int)y / (int)mGridSize.y);
@@ -209,7 +209,7 @@ void GameScene::DoAction(const Action& action)
 				{
 					if (point_inside_entity(vec2(mMouseCursor.getPosition().x, mMouseCursor.getPosition().y), e))
 					{
-						e->getComponent<CDraggable>().dublicate = true;
+						e->getComponent<CDraggable>().duplicate = true;
 						break;
 					}
 
@@ -246,9 +246,9 @@ void GameScene::DoAction(const Action& action)
 		{
 			for (auto e : mEntites.getEntities())
 			{
-				if (e->hasComponent<CDraggable>() && e->getComponent<CDraggable>().dublicate)
+				if (e->hasComponent<CDraggable>() && e->getComponent<CDraggable>().duplicate)
 				{
-					e->getComponent<CDraggable>().dublicate = false;
+					e->getComponent<CDraggable>().duplicate = false;
 					// create a new copy of the current entity
 					auto n = mEntites.addEntity( e->Tag() );
 					

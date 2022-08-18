@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Engine.h"
 #include "Game.h"
+#include "LevelEditor.h"
 
 Menu::Menu(Engine* engine)
 	:Scene(engine)
@@ -15,6 +16,7 @@ void Menu::Init()
 	registerAction(sf::Keyboard::W, "UP");
 	registerAction(sf::Keyboard::S, "DOWN");
 	registerAction(sf::Keyboard::P, "Play");
+	registerAction(sf::Keyboard::L, "Load");
 	registerAction(sf::Keyboard::Escape, "Quit");
 
 	//menu_font = (mGame->GetAsset().getFont("Title"));
@@ -101,6 +103,10 @@ void Menu::DoAction(const Action& action)
 		{
 			mGame->ChangeScene("LevelScene",
 				std::make_shared<GameScene>(mGame, "assets/level01.txt"));
+		}
+		else if (action.Name() == "Load")
+		{
+			mGame->ChangeScene("Level Editor", std::make_shared<Editor>(mGame));
 		}
 	}
 }
