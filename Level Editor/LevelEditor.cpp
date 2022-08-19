@@ -4,7 +4,14 @@ Editor::Editor(Engine* engine)
 	:Scene(engine)
 {
 	registerAction(sf::Keyboard::Escape, "Quit");
-	registerAction(sf::Keyboard::F1, "Toggle Debug");
+	registerAction(sf::Keyboard::G, "Debug");
+	registerAction(sf::Keyboard::W, "UP");
+	registerAction(sf::Keyboard::S, "DOWN");
+	registerAction(sf::Keyboard::A, "LEFT");
+	registerAction(sf::Keyboard::D, "RIGHT");
+	
+
+	
 	Init();
 }
 
@@ -34,6 +41,8 @@ void Editor::Update()
 
 void Editor::Render()
 {
+	mGame->Window().clear(sf::Color(100, 100, 255));
+
 	ImGui::ShowDemoWindow();
 	if (mDebugGrid)
 	{
@@ -41,7 +50,6 @@ void Editor::Render()
 	}
 	DrawSelectableTexture();
 	//move shape
-	shape.setPosition(shape_input_pos.x, shape_input_pos.y);
 	for (auto e : entityManager.getEntities())
 	{
 		auto& t = e->getComponent<CTransform>();
@@ -66,31 +74,26 @@ void Editor::DoAction(const Action& action)
 	auto type = action.Type();
 	if (type == "BEGIN")
 	{
-		if (name == "Quit")
-		{
-			mGame->Window().close();
-		}
-		if (name == "LeftClick")
-		{
-			//set the dragging to true for the first entity with Dragable component
+		// wasd movement to move the view
+		if (name == "UP")        {MoveScreenView(vec2(0.0f, -TILE_SIZE.y));}
+		else if (name == "DOWN") {MoveScreenView(vec2(0.0f, TILE_SIZE.y));}
+		else if (name == "LEFT") {MoveScreenView(vec2(-TILE_SIZE.x, 0.0f));}
+		else if (name == "RIGHT"){MoveScreenView(vec2(TILE_SIZE.x, 0.0f));}
+		else if (name == "Quit") {mGame->Quit();}
+		else if (name == "Debug"){mDebugGrid = !mDebugGrid;}
+		if (name == "Quit"){mGame->Window().close();}
+		if (name == "LeftClick"){
 			for (auto e : entityManager.getEntities())
-			{
 				if (e->hasComponent<CDraggable>())
 				{
 					if (point_inside_entity(vec2(mMouseCursor.getPosition().x, mMouseCursor.getPosition().y), e))
 					{
 						e->getComponent<CDraggable>().dragging = true;
-						last_click = "";
 						break;
 					}
 
 				}
 			}
-		}
-		if (name == "Toggle Debug")
-		{
-			mDebugGrid = !mDebugGrid;
-		}
 	}
 	else if (type == "END")
 	{
@@ -109,33 +112,8 @@ void Editor::DoAction(const Action& action)
 	}
 	else if (type == "MOUSEMOVE")
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&& last_click != "")
-		{
-			auto pos = sf::Mouse::getPosition();
-			CreateSelectedEntity(last_click, vec2(pos.x, pos.y));
-
-		}
-		const auto pos = action.Position();
-		const auto mouse_pos = sf::Vector2i(pos.x, pos.y);
-		//update the mouse cursor position based on the view
-		const auto delta = mGame->Window().mapPixelToCoords(mouse_pos) - mMouseCursor.getPosition();
-		//set the mouse cursor position to the new position
-		mMouseCursor.setPosition(mMouseCursor.getPosition() + delta);
-
-		for (auto e : entityManager.getEntities())
-		{
-			if (e->hasComponent<CDraggable>())
-			{
-				if (e->getComponent<CDraggable>().dragging)
-				{
-					const auto pos = mMouseCursor.getPosition();
-					e->getComponent<CTransform>().position = vec2(pos.x, pos.y);
-				}
-			}
-		}
+		PlaceEntityBasedOnMouse (action.Position());
 	}
-	std::cout << action.toString() << std::endl;
-	
 }
 
 void Editor::DrawGrid()
@@ -153,16 +131,22 @@ void Editor::DrawGrid()
 
 		window.draw(line, 2, sf::Lines);
 	};
-	auto width = mGame->Window().getSize().x / TILE_SIZE.x;
-	auto heght = mGame->Window().getSize().y/ TILE_SIZE.y;
-	for (int i = 0; i < width; i++)
-	{
-		drawLine(vec2(i * TILE_SIZE.x, 0), vec2(i * TILE_SIZE.x, mGame->Window().getSize().y), mGame->Window());
-	}
-	for (int i = 0; i < heght; i++)
-	{
-		drawLine(vec2(0, i * TILE_SIZE.y), vec2(mGame->Window().getSize().x, i * TILE_SIZE.y), mGame->Window());
-	}
+	
+		auto width = (mGame->Window().getSize().x);
+		auto height = (mGame->Window().getSize().y);
+		auto view = mGame->Window().getView();
+		float leftX = view.getCenter().x - width / 2;
+		float rightX = leftX + width+ TILE_SIZE.x;
+		float topY = mGame->Window().getView().getCenter().y - height / 2;
+		float bottomY = topY + height + TILE_SIZE.y;
+		for (int i = 0; i < width; i++)
+		{
+			drawLine(vec2(leftX + i * TILE_SIZE.x, topY), vec2(leftX + i * TILE_SIZE.x, bottomY), mGame->Window());
+		}
+		for (int i = 0; i < height; i++)
+		{
+			drawLine(vec2(leftX, topY + i * TILE_SIZE.y), vec2(rightX, topY + i * TILE_SIZE.y), mGame->Window());
+		}
 	
 }
 
@@ -192,7 +176,6 @@ void Editor::DrawSelectableTexture()
 		if (ImGui::IsItemClicked())
 		{
 			CreateSelectedEntity( e, vec2(pos.x, pos.y));
-			last_click = e;
 		}
 		
 	}
@@ -206,12 +189,50 @@ void Editor::CreateSelectedEntity(const std::string& name, const vec2& pos)
 	auto animation = mGame->GetAsset().getAnimation(name);
 	//create entity
 	auto entity = entityManager.addEntity(name);
-	//add postion component
-	entity->addComponent<CTransform>( pos, vec2(1,1), 0.f);
+	//add postion component by snaping to grid
+	auto x = (int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x;
+	auto y = (int)(pos.y / TILE_SIZE.y) * TILE_SIZE.y;
+	entity->addComponent<CTransform>(vec2(x,y), vec2(1,1), 0.f);
 	//add animation component
 	entity->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
 	entity->addComponent<CBoundingBox>(
 		entity->getComponent<CAnimation>().animation.GetSize());
 	entity->addComponent<CDraggable>();
 	entity->getComponent<CDraggable>().dragging = true;
+}
+
+void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
+{
+	const auto mouse_pos = sf::Vector2i(pos.x, pos.y);
+
+	//update the mouse cursor position based on the view
+	const auto delta = mGame->Window().mapPixelToCoords(mouse_pos) - mMouseCursor.getPosition();
+	//set the mouse cursor position to the new position
+	mMouseCursor.setPosition(mMouseCursor.getPosition() + delta);
+
+	// snap to the grid to the top right coner. + TIle/size.x/2 because the center is in middle
+	auto x = ((int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x) + TILE_SIZE.x / 2;
+	auto y = ((int)(pos.y / TILE_SIZE.y) * TILE_SIZE.y) + TILE_SIZE.y / 2;
+	//update x, y based on the view
+	x = mGame->Window().mapPixelToCoords(sf::Vector2i(x, y)).x;
+	y = mGame->Window().mapPixelToCoords(sf::Vector2i(x, y)).y;
+
+	for (auto e : entityManager.getEntities())
+	{
+		if (e->hasComponent<CDraggable>())
+		{
+			if (e->getComponent<CDraggable>().dragging)
+			{
+				e->getComponent<CTransform>().position = vec2(x, y);
+			}
+		}
+	}
+	
+}
+
+void Editor::MoveScreenView(const vec2& dir)
+{
+	auto view = mGame->Window().getView();
+	view.move(dir.x, dir.y);
+	mGame->Window().setView(view);
 }
