@@ -1,38 +1,40 @@
 Scene: Untitled
 Entities:
   - "Entity ": 0
-    Tag: Stand64
+    Tag: Block
     Transform Component:
-      Position: [544, 288]
+      Position: [32, 672]
       velocity: [1, 1]
-      Scale: [544, 288]
+      Scale: [1, 1]
       Rotation: 0
     Animation Component:
-      Animation: [Stand64, [32, 64], 1]
+      Name: Block
       Repeat: true
     Draggable Component:
       Draggable: false
   - "Entity ": 1
-    Tag: Block
+    Tag: Ground
     Transform Component:
-      Position: [544, 159.999985]
+      Position: [96, 672]
       velocity: [1, 1]
-      Scale: [544, 159.999985]
+      Scale: [1, 1]
       Rotation: 0
+    Bounding Box Component:
+      Bounding Box: [64, 64]
     Animation Component:
-      Animation: [Block, [64, 64], 1]
+      Name: Ground
       Repeat: true
     Draggable Component:
       Draggable: false
   - "Entity ": 2
-    Tag: Ground
+    Tag: Stand64
     Transform Component:
-      Position: [608, 352]
+      Position: [1248.00012, 672]
       velocity: [1, 1]
-      Scale: [608, 352]
+      Scale: [1, 1]
       Rotation: 0
     Animation Component:
-      Animation: [Ground, [64, 64], 1]
+      Name: Stand64
       Repeat: true
     Draggable Component:
       Draggable: false

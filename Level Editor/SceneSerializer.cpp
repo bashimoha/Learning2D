@@ -24,29 +24,7 @@ namespace YAML {
 			return true;
 		}
 	};
-	//for animation
-	template<>
-	struct convert<Animation>
-	{
-		static Node encode(const Animation& rhs)
-		{
-			Node node;
-			node.SetStyle(EmitterStyle::Flow);
-			node["name"] = rhs.GetName();
-			node["size"] = rhs.GetSize();
-			node["frame count"] = rhs.GetFrameCount();
-			return node;
-		}
 
-		static bool decode(const Node& node, Animation& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 2)
-				return false;
-			rhs.SetName(node[0].as<std::string>());
-			rhs.mSize = (node[1].as<vec2>());
-			rhs.SetFrame(node[2].as<int>());
-		}
-	};
 
 
 
@@ -55,12 +33,6 @@ namespace YAML {
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
-		return out;
-	}
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Animation& a)
-	{
-		out << YAML::Flow;
-		out << YAML::BeginSeq << a.GetName() << a.GetSize() << a.GetFrameCount() << YAML::EndSeq;
 		return out;
 	}
 }
@@ -99,7 +71,7 @@ static void SerializeEntity(YAML::Emitter& out, std::shared_ptr<Entity> entity)
 		auto tc = entity->getComponent<CTransform>();
 		out << YAML::Key << "Position" << YAML::Value<< tc.position;
 		out << YAML::Key << "velocity" << YAML::Value << tc.velocity;
-		out << YAML::Key << "Scale" << YAML::Value << tc.position;
+		out << YAML::Key << "Scale" << YAML::Value << tc.scale;
 		out << YAML::Key << "Rotation" << YAML::Value  << tc.angle;
 		out << YAML::EndMap;
 	}
@@ -151,8 +123,8 @@ static void SerializeEntity(YAML::Emitter& out, std::shared_ptr<Entity> entity)
 	{
 		out << YAML::Key << "Animation Component";
 		out << YAML::BeginMap;
-		auto ac = entity->getComponent<CAnimation>();
-		out << YAML::Key << "Animation" << YAML::Value << ac.animation << YAML::Key<< "Repeat" << YAML::Value << ac.repeat;
+		out << YAML::Key << "Name" << YAML::Value << entity->getComponent<CAnimation>().animation.GetName();
+		out << YAML::Key << "Repeat" << YAML::Value << entity->getComponent<CAnimation>().repeat;
 		out << YAML::EndMap;
 	}
 	if (entity->hasComponent<CDraggable>())
@@ -247,12 +219,9 @@ bool SceneSerializer::Deserialize(Scene* scene, std::string filepath)
 			auto ac = entity["Animation Component"];
 			if (ac)
 			{
-				auto animation = ac["Animation"].as<Animation>();
+				auto animation = ac["Name"].as<std::string>();
 				auto repeat = ac["Repeat"].as<bool>();
-				auto& a = e->addComponent<CAnimation>();
-				a.animation = animation;
-				a.repeat = repeat;
-				
+				auto& a = e->addComponent<CAnimation>(scene->mGame->GetAsset().getAnimation(animation), repeat);
 			}
 			auto dc = entity["Draggable Component"];
 			if (dc)
