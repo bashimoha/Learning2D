@@ -40,7 +40,7 @@ bool Animation::IsDone() const
 	return mDone;
 }
 
-std::string Animation::GetName()
+std::string Animation::GetName() const
 {
 	return mName;
 }
@@ -58,4 +58,14 @@ sf::Sprite& Animation::GetSprite()
 size_t Animation::GetFrameCount() const
 {
 	return mTotalFrames;
+}
+void Animation::SetName(const std::string& name)
+{
+	mName = name;
+}
+
+std::ostream& operator<<(std::ostream& os, const Animation& anim)
+{
+	os<< anim.mName << " " << anim.mTotalFrames << " " << anim.mSpeed;
+	return os;
 }

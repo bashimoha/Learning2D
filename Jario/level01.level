@@ -1,0 +1,38 @@
+Scene: Untitled
+Entities:
+  - "Entity ": 0
+    Tag: Stand64
+    Transform Component:
+      Position: [544, 288]
+      velocity: [1, 1]
+      Scale: [544, 288]
+      Rotation: 0
+    Animation Component:
+      Animation: [Stand64, [32, 64], 1]
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 1
+    Tag: Block
+    Transform Component:
+      Position: [544, 159.999985]
+      velocity: [1, 1]
+      Scale: [544, 159.999985]
+      Rotation: 0
+    Animation Component:
+      Animation: [Block, [64, 64], 1]
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 2
+    Tag: Ground
+    Transform Component:
+      Position: [608, 352]
+      velocity: [1, 1]
+      Scale: [608, 352]
+      Rotation: 0
+    Animation Component:
+      Animation: [Ground, [64, 64], 1]
+      Repeat: true
+    Draggable Component:
+      Draggable: false

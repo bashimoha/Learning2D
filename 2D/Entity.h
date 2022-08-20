@@ -12,7 +12,8 @@ class Entity
 {
 public:
 	friend class EntityManager;
-	
+	//maybe not a good idea but for now I need it
+	void SetTag(const std::string&);
 	std::string Tag() const;
 	size_t ID() const;
 	bool isActive() const;

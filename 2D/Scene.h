@@ -2,9 +2,11 @@
 #include "EntityManager.h"
 #include "Action.h"
 class Engine;
+class SceneSerializer;
 class Scene
 {
 public:
+	friend class SceneSerializer;
 	Scene()=default;
 	explicit Scene(Engine* engine);
 	//sys 

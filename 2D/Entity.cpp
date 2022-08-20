@@ -5,6 +5,10 @@ std::string Entity::Tag() const
 	return mTag;
 
 }
+void Entity::SetTag(const std::string& tag)
+{
+	mTag = tag;
+}
 size_t Entity::ID() const
 {
 	return mId;

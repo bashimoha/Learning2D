@@ -5,6 +5,7 @@
 Scene::Scene(Engine* engine)
 	:mGame(engine)
 {
+
 }
 
 

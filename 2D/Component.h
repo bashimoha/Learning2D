@@ -14,8 +14,8 @@ public:
 	CTransform() = default;
 	vec2 position{}, velocity{}, prev_position{}, scale{};
 	float angle;
-	CTransform(const vec2& pos, const vec2& vel, float ang)
-		:position(pos), velocity(vel), prev_position(pos), scale({ 1,1 }), angle(ang){}
+	CTransform(const vec2& pos, const vec2& vel, float ang, vec2 _scale = vec2{1.f, 1.f})
+		:position(pos), velocity(vel), prev_position(pos), scale(_scale), angle(ang){}
 };
 class CInput : public Component
 {
@@ -36,7 +36,7 @@ class CGravity : public Component
 {
 public:
 	CGravity() {}
-	CGravity(float gravity) :gravity(gravity), gravity_velocity(gravity) {}
+	CGravity(float gravity, float velocity = 1.f) :gravity(gravity), gravity_velocity(velocity) {}
 	float gravity{ 0.f };
 	float gravity_velocity{ 0.f };
 };
