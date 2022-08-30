@@ -1,0 +1,832 @@
+Scene: Untitled
+Entities:
+  - "Entity ": 69
+    Tag: Ground
+    Transform Component:
+      Position: [32, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 70
+    Tag: Ground
+    Transform Component:
+      Position: [32, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 71
+    Tag: Ground
+    Transform Component:
+      Position: [32, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 72
+    Tag: Ground
+    Transform Component:
+      Position: [96, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 73
+    Tag: Ground
+    Transform Component:
+      Position: [96, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 74
+    Tag: Ground
+    Transform Component:
+      Position: [96, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 75
+    Tag: Ground
+    Transform Component:
+      Position: [160, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 76
+    Tag: Ground
+    Transform Component:
+      Position: [160, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 77
+    Tag: Ground
+    Transform Component:
+      Position: [224, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 78
+    Tag: Ground
+    Transform Component:
+      Position: [288, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 79
+    Tag: Ground
+    Transform Component:
+      Position: [352, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 80
+    Tag: Ground
+    Transform Component:
+      Position: [416, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 81
+    Tag: Ground
+    Transform Component:
+      Position: [480, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 82
+    Tag: Ground
+    Transform Component:
+      Position: [736, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 83
+    Tag: Ground
+    Transform Component:
+      Position: [480, 480]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 84
+    Tag: Ground
+    Transform Component:
+      Position: [672, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 85
+    Tag: Ground
+    Transform Component:
+      Position: [736, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 86
+    Tag: Ground
+    Transform Component:
+      Position: [800, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 87
+    Tag: Ground
+    Transform Component:
+      Position: [864, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 88
+    Tag: Ground
+    Transform Component:
+      Position: [928, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 89
+    Tag: Ground
+    Transform Component:
+      Position: [224, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 90
+    Tag: Ground
+    Transform Component:
+      Position: [160, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 91
+    Tag: Ground
+    Transform Component:
+      Position: [224, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 92
+    Tag: Ground
+    Transform Component:
+      Position: [288, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 93
+    Tag: Ground
+    Transform Component:
+      Position: [288, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 94
+    Tag: Ground
+    Transform Component:
+      Position: [352, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 95
+    Tag: Ground
+    Transform Component:
+      Position: [352, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 96
+    Tag: Ground
+    Transform Component:
+      Position: [992, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 97
+    Tag: Ground
+    Transform Component:
+      Position: [1056, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 98
+    Tag: Ground
+    Transform Component:
+      Position: [1120, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 99
+    Tag: Ground
+    Transform Component:
+      Position: [1184, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 100
+    Tag: Ground
+    Transform Component:
+      Position: [1248, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 101
+    Tag: Ground
+    Transform Component:
+      Position: [416, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 102
+    Tag: Ground
+    Transform Component:
+      Position: [480, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 103
+    Tag: Ground
+    Transform Component:
+      Position: [544, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 104
+    Tag: Ground
+    Transform Component:
+      Position: [608, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 105
+    Tag: Ground
+    Transform Component:
+      Position: [672, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 106
+    Tag: Ground
+    Transform Component:
+      Position: [736, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 107
+    Tag: Ground
+    Transform Component:
+      Position: [800, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 108
+    Tag: Ground
+    Transform Component:
+      Position: [864, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 109
+    Tag: Ground
+    Transform Component:
+      Position: [928, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 110
+    Tag: Ground
+    Transform Component:
+      Position: [928, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 111
+    Tag: Ground
+    Transform Component:
+      Position: [992, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 112
+    Tag: Ground
+    Transform Component:
+      Position: [1056, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 113
+    Tag: Ground
+    Transform Component:
+      Position: [1120, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 114
+    Tag: Ground
+    Transform Component:
+      Position: [1184, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 115
+    Tag: Ground
+    Transform Component:
+      Position: [1248, 672]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 116
+    Tag: Ground
+    Transform Component:
+      Position: [416, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 117
+    Tag: Ground
+    Transform Component:
+      Position: [480, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 118
+    Tag: Ground
+    Transform Component:
+      Position: [544, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 119
+    Tag: Ground
+    Transform Component:
+      Position: [608, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 120
+    Tag: Ground
+    Transform Component:
+      Position: [672, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 121
+    Tag: Ground
+    Transform Component:
+      Position: [736, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 122
+    Tag: Ground
+    Transform Component:
+      Position: [800, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 123
+    Tag: Ground
+    Transform Component:
+      Position: [864, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 124
+    Tag: Ground
+    Transform Component:
+      Position: [992, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 125
+    Tag: Ground
+    Transform Component:
+      Position: [1056, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 126
+    Tag: Ground
+    Transform Component:
+      Position: [1120, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 127
+    Tag: Ground
+    Transform Component:
+      Position: [1184, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 128
+    Tag: Ground
+    Transform Component:
+      Position: [1248, 736]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 129
+    Tag: Ground
+    Transform Component:
+      Position: [1335.15552, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 130
+    Tag: Ground
+    Transform Component:
+      Position: [1270.15625, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 131
+    Tag: Question
+    Transform Component:
+      Position: [544, 352]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Question
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 132
+    Tag: PipeTall
+    Transform Component:
+      Position: [864, 480]
+      velocity: [1, 1]
+      Scale: [1, 1.29999995]
+      Rotation: 0
+    Bounding Box Component:
+      Bounding Box: [96, 144]
+    Animation Component:
+      Name: PipeTall
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 133
+    Tag: Ground
+    Transform Component:
+      Position: [544, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 134
+    Tag: Ground
+    Transform Component:
+      Position: [608, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 135
+    Tag: Ground
+    Transform Component:
+      Position: [672, 608]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Ground
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 136
+    Tag: PipeTall
+    Transform Component:
+      Position: [480, 544]
+      velocity: [1, 1]
+      Scale: [1, 0.400000006]
+      Rotation: 0
+    Animation Component:
+      Name: PipeTall
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+  - "Entity ": 137
+    Tag: Stand64
+    Transform Component:
+      Position: [224, 544]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Animation Component:
+      Name: Stand64
+      Repeat: true
+    Draggable Component:
+      Draggable: false

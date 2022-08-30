@@ -1,109 +1,96 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="$(SolutionDir)3rdparty">
+      <UniqueIdentifier>{6FF4F445-5BEE-1D98-445B-B4A830F48304}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="$(SolutionDir)3rdparty\imgui">
+      <UniqueIdentifier>{1959A844-0514-98F0-AECB-103B9A65E280}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="$(SolutionDir)3rdparty\imgui-sfml">
+      <UniqueIdentifier>{580F8846-C47D-DDC5-0D67-98C57914D361}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Font">
-      <UniqueIdentifier>{2f6f9e64-56e3-4efc-aa2e-246862b6dc39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RandomStuff">
-      <UniqueIdentifier>{fc6aecfd-3978-428f-b045-e28eefa30135}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bs.cpp">
-      <Filter>RandomStuff</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Assets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>RandomStuff</Filter>
-    </ClCompile>
-    <ClCompile Include="Action.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\2D.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Action.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Animation.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Vec2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Assets.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Common.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Component.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Assets.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Engine.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>RandomStuff</Filter>
+    <ClInclude Include="src\Entity.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Action.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Game.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="physics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Vec2.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="fonts\halfelven.ttf">
-      <Filter>Font</Filter>
-    </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="config.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="assets\test.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui-sfml</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Action.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assets.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bs.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

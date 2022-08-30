@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="$(SolutionDir)3rdparty">
+      <UniqueIdentifier>{6FF4F445-5BEE-1D98-445B-B4A830F48304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\imgui">
+      <UniqueIdentifier>{1959A844-0514-98F0-AECB-103B9A65E280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\imgui\misc">
+      <UniqueIdentifier>{9403A946-0072-FEC5-495B-B9C5B508F461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\imgui\misc\cpp">
+      <UniqueIdentifier>{662704B4-D2EB-02A4-9B51-336E07D59ED9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\imgui-sfml">
+      <UniqueIdentifier>{580F8846-C47D-DDC5-0D67-98C57914D361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.h">
+      <Filter>$(SolutionDir)3rdparty\imgui-sfml</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML_export.h">
+      <Filter>$(SolutionDir)3rdparty\imgui-sfml</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imconfig.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui_internal.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_rectpack.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_textedit.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_truetype.h">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelEditor.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SceneSerializer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui-sfml</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_demo.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_draw.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_tables.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_widgets.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>$(SolutionDir)3rdparty\imgui\misc\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelEditor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneSerializer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
