@@ -7,3 +7,9 @@
 [submodule "3rdparty/imgui-sfml"]
 	path = 3rdparty/imgui-sfml
 	url = https://github.com/eliasdaler/imgui-sfml.git
+[submodule "3rdparty/box2d"]
+	path = 3rdparty/box2d
+	url = https://github.com/TheCherno/box2d.git
+[submodule "box2d"]
+	path = box2d
+	url = https://github.com/TheCherno/box2d.git
