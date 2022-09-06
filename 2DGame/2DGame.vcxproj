@@ -19,33 +19,33 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A4A34224-1059-BB19-994D-B5F00502B21D}</ProjectGuid>
+    <ProjectGuid>{75107881-61B2-A257-4A6D-B6AB36AE29A8}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>LevelEditor</RootNamespace>
+    <RootNamespace>2DGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x86|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release x86|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -67,35 +67,39 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\Debug-x86_64\LevelEditor\</OutDir>
-    <IntDir>..\bin-int\Debug-x86_64\LevelEditor\x64\</IntDir>
-    <TargetName>LevelEditor</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug-x86_64\2DGame\</OutDir>
+    <IntDir>..\bin-int\Debug-x86_64\2DGame\x64\</IntDir>
+    <TargetName>2DGame</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug x86|x64'">
-    <OutDir>..\bin\Debug-x86_64\LevelEditor\</OutDir>
-    <IntDir>..\bin-int\Debug-x86_64\LevelEditor\x86\</IntDir>
-    <TargetName>LevelEditor</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug-x86_64\2DGame\</OutDir>
+    <IntDir>..\bin-int\Debug-x86_64\2DGame\x86\</IntDir>
+    <TargetName>2DGame</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\Release-x86_64\LevelEditor\</OutDir>
-    <IntDir>..\bin-int\Release-x86_64\LevelEditor\x64\</IntDir>
-    <TargetName>LevelEditor</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release-x86_64\2DGame\</OutDir>
+    <IntDir>..\bin-int\Release-x86_64\2DGame\x64\</IntDir>
+    <TargetName>2DGame</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release x86|x64'">
-    <OutDir>..\bin\Release-x86_64\LevelEditor\</OutDir>
-    <IntDir>..\bin-int\Release-x86_64\LevelEditor\x86\</IntDir>
-    <TargetName>LevelEditor</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release-x86_64\2DGame\</OutDir>
+    <IntDir>..\bin-int\Release-x86_64\2DGame\x86\</IntDir>
+    <TargetName>2DGame</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)2D\src;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)LevelEditor\src;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -104,7 +108,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -113,7 +117,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)2D\src;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)LevelEditor\src;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -122,7 +126,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -131,7 +135,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)2D\src;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)LevelEditor\src;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -142,20 +146,17 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib ..\bin\Release-x86_64\2DGame &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib ..\bin\Release-x86_64\2DGame &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release x86|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)2D\src;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)LevelEditor\src;$(SolutionDir)3rdparty\imgui\misc\cpp;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -166,38 +167,26 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib ..\bin\Release-x86_64\2DGame &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\LevelEditor\LevelEditor.lib ..\bin\Release-x86_64\2DGame &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML_export.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imconfig.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui_internal.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_rectpack.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_textedit.h" />
-    <ClInclude Include="$(SolutionDir)3rdparty\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\LevelEditor.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Menu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_demo.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_draw.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_tables.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="$(SolutionDir)3rdparty\imgui\misc\cpp\imgui_stdlib.cpp" />
-    <ClCompile Include="src\LevelEditor.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\2D\2D.vcxproj">
       <Project>{FB705900-E7FC-870B-50AB-880B3C56880B}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LevelEditor\LevelEditor.vcxproj">
+      <Project>{A4A34224-1059-BB19-994D-B5F00502B21D}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

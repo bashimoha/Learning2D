@@ -1,19 +1,19 @@
-//#include "2D.h"
-#include "vec2.h"
+#include "2D.h"
+#include <SFML/System/Clock.hpp>
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "imgui-SFML.h"
 #include "imgui_stdlib.h"
-#include "SceneSerializer.h"
+#include <box2d.h>
 
-#include <SFML/System/Clock.hpp>
 class PlayGame;
 class Editor : public Scene
 {
 public:
 	Editor(Engine* engine);
+	~Editor() override;
 	void Init();
-	void Update();
+	void Update(sf::Clock deltaClock);
 	void Render();
 	void  DoAction(const Action&);
 private:
@@ -35,6 +35,8 @@ private:
 	void CreateNENTT(int);
 	void sAnimation();
 	void drawBg();
+	void FileDialogUI();
+	void _imgui();
 private:
 	float nEntt{ 0 };
 	constexpr static size_t BACKGROUNDLAYERS = 3;
@@ -44,30 +46,23 @@ private:
 	friend class PlayGame;
 	sf::RenderTexture mRenderTexture;
 	sf::View mRenderView;
-	void FileDialogUI();
-	sf::Clock deltaClock{};
 	const vec2 TILE_SIZE{ 16, 16 };
 	sf::CircleShape mMouseCursor{};
 	bool mDebugGrid{ false };
 	std::shared_ptr<Entity> mSelectedEntity{};
-	SceneSerializer mSerializer{};
 	std::string mLastOpenedFile = "";
-	void _imgui();
-	
 };
-
 class PlayGame : public Scene
 {
 public:
 	PlayGame(Engine* engine,Editor* editor ,const std::string& scene_name = "LevelEditor");
+	~PlayGame() override;
 	void Init();
-	void Update();
-	void Render();
-	void  DoAction(const Action&);
+	void Update(sf::Clock deltaClock) override;
+	void Render() override;
+	void  DoAction(const Action&) override;
 private:
 	sf::RenderTexture mRenderTexture;
-	sf::Clock deltaClock{};
-	SceneSerializer mSerializer{};
 	std::string mSceneName{};
 	Editor* mEditor = nullptr;
 	std::shared_ptr<Entity> mPlayer;

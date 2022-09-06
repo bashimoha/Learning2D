@@ -8,4 +8,5 @@
 #include "EntityManager.h"
 #include "physics.h"
 #include "Scene.h"
+#include "SceneSerializer.h"
 #include "Vec2.h"

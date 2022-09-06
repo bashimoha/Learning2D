@@ -5,7 +5,7 @@
 class EntityManager; 
 
 //tuple of components maybe a better way?
-using ComponentTuple = std::tuple<CTransform, CGravity, CHealth,CInput, CBoundingBox, CState, CAnimation, CDraggable, CRenderable>
+using ComponentTuple = std::tuple<CTransform, CGravity, CHealth,CInput, CBoundingBox, CState, CAnimation, CDraggable, CRenderable, CRigidBody>
 ;
 
 class Entity

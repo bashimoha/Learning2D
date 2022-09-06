@@ -48,9 +48,6 @@
     <ClInclude Include="src\LevelEditor.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\SceneSerializer.h">
-      <Filter>src</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp">
@@ -75,9 +72,6 @@
       <Filter>$(SolutionDir)3rdparty\imgui\misc\cpp</Filter>
     </ClCompile>
     <ClCompile Include="src\LevelEditor.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneSerializer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

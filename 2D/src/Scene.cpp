@@ -3,7 +3,7 @@
 
 
 Scene::Scene(Engine* engine)
-	:mGame(engine)
+	:mEngine(engine)
 {
 
 }

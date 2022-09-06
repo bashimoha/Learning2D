@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\src;$(SolutionDir)3rdparty\box2d\include;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -113,7 +113,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\src;$(SolutionDir)3rdparty\box2d\include;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -131,7 +131,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\src;$(SolutionDir)3rdparty\box2d\include;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -148,7 +148,7 @@
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\LevelEditor &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\LevelEditor &gt; nul)
-IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\Jario &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\Jario &gt; nul)</Command>
+IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\2DGame &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\2DGame &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release x86|x64'">
@@ -156,7 +156,7 @@ IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)2D\src;$(SolutionDir)3rdparty\imgui;$(SolutionDir)3rdparty\imgui-sfml;$(SolutionDir)3rdparty\box2d\src;$(SolutionDir)3rdparty\box2d\include;$(SolutionDir)3rdparty\box2d\include\box2d;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -173,10 +173,19 @@ IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\LevelEditor &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\LevelEditor &gt; nul)
-IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\Jario &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\Jario &gt; nul)</Command>
+IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\2DGame &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x86_64\2D\2D.lib ..\bin\Release-x86_64\2DGame &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_circle_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_polygon_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_circle_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_solver.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_circle_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_polygon_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_island.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_circle_contact.h" />
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_contact.h" />
     <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui.h" />
     <ClInclude Include="src\2D.h" />
     <ClInclude Include="src\Action.h" />
@@ -187,12 +196,57 @@ IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
-    <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\SceneSerializer.h" />
     <ClInclude Include="src\Vec2.h" />
     <ClInclude Include="src\physics.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_broad_phase.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_chain_shape.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_circle_shape.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_circle.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_edge.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_polygon.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collision.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_distance.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_dynamic_tree.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_edge_shape.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_polygon_shape.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_time_of_impact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_block_allocator.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_draw.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_math.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_settings.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_stack_allocator.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_timer.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_body.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_circle_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_polygon_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_circle_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_manager.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_solver.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_distance_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_circle_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_polygon_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_fixture.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_friction_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_gear_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_island.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_motor_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_mouse_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_circle_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_contact.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_prismatic_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_pulley_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_revolute_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_weld_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_wheel_joint.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_world.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_world_callbacks.cpp" />
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\rope\b2_rope.cpp" />
     <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp" />
     <ClCompile Include="src\Action.cpp" />
     <ClCompile Include="src\Animation.cpp" />
@@ -200,8 +254,8 @@ IF EXIST ..\bin\Release-x86_64\2D\2D.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x86_
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
-    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SceneSerializer.cpp" />
     <ClCompile Include="src\bs.cpp" />
     <ClCompile Include="src\physics.cpp" />
   </ItemGroup>

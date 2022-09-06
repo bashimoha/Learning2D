@@ -2,6 +2,9 @@
 
 #include "Common.h"
 #include "Animation.h"
+
+class b2Body;
+class b2Fixture;
 class Component
 {
 public:
@@ -75,21 +78,13 @@ class CDraggable: public Component
 	bool dragging{ false };
 	bool duplicate{ false };
 };
-
-/*Maybe place it in a different file or even rm it since I sorta don't need it?*/
-class DrawableEntity : public sf::Transformable, public sf::Drawable
+class CRigidBody : public Component
 {
 public:
-	DrawableEntity() = default;
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-	{
-		states.transform *= getTransform();
-		target.draw(vertices, states);
-	}
-	sf::VertexArray vertices;
+	CRigidBody() = default;
+	b2Body* body{ nullptr };
+	b2Fixture* fixture{ nullptr };
 };
-
-//sfml primitve Renderable component
 class CRenderable : public Component
 {
 public:
@@ -105,28 +100,5 @@ public:
 	}
 	CRenderable(const sf::CircleShape& _shape) :shape(_shape) {}
 	CRenderable() = default;
-	
-};
-
-
-
-
-
-
-#if 0
-class CShape : Component
-{
-public:
-	
-};
-
-class CScore : Component
-{
-public:
-	int score{};
-	CScore(int s) :score(s) {}
 
 };
-
-
-#endif

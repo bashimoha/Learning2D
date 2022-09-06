@@ -24,7 +24,7 @@ void Engine::Update()
 {
 	if (mScenes[mCurrentScene])
 	{
-		mScenes[mCurrentScene]->Update();
+		mScenes[mCurrentScene]->Update(clock);
 	}
 }
 void Engine::Quit()

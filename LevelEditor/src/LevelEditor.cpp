@@ -1,9 +1,6 @@
 #include "LevelEditor.h"
 #include <Windows.h>
 #include <commdlg.h>
-
-
-
 static void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2, sf::RenderTarget* target)
 {
 	sf::Vertex line[] =
@@ -16,10 +13,6 @@ static void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2, sf::RenderT
 	line[1].color = sf::Color::White;
 	target->draw(line, 2, sf::Lines);
 };
-
-
-
-
 Editor::Editor(Engine* engine)
 	:Scene(engine)
 {
@@ -33,18 +26,23 @@ Editor::Editor(Engine* engine)
 	registerAction(sf::Keyboard::E, "ZOOM_OUT");
 	registerAction(sf::Keyboard::P, "Play");
 	registerAction(sf::Keyboard::N, "Create");
-
-	mSerializer = SceneSerializer(this);
+	mSerializer = new SceneSerializer(this);
 	Init();
 }
-
+Editor::~Editor()
+{
+	delete mSerializer;
+	delete mWorld;
+	mSerializer = nullptr;
+	mWorld = nullptr;
+}
 void Editor::Init()
 {
 	std::string title{ "Level Editor" };
 	
-	auto window_size = mGame->Window().getSize();
-	mGame->Window().create(sf::VideoMode(window_size.x, window_size.y), title, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-	mGame->Window().setTitle(title);
+	auto window_size = mEngine->Window().getSize();
+	mEngine->Window().create(sf::VideoMode(window_size.x, window_size.y), title, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+	mEngine->Window().setTitle(title);
 
 	mMouseCursor.setRadius(10.0f);
 	mMouseCursor.setPointCount(40);
@@ -53,24 +51,22 @@ void Editor::Init()
 	auto pos = sf::Mouse::getPosition();
 	mMouseCursor.setPosition(sf::Vector2f(pos.x, pos.y));
 	mMouseCursor.setOutlineColor(sf::Color::Black);
-
 	for (size_t i = 0; i < BACKGROUNDLAYERS; i++)
 	{
 		auto layer_name = "background"+ std::to_string(i);
-		mBackgroundLayer[i].setTexture(mGame->GetAsset().getTexture(layer_name));
+		mBackgroundLayer[i].setTexture(mEngine->GetAsset().getTexture(layer_name));
 		mBackgroundLayer[i].setScale(window_size.x / mBackgroundLayer[i].getLocalBounds().width, window_size.y / mBackgroundLayer[i].getLocalBounds().height);
 		//pos
 		mBackgroundLayer[i].setPosition(0, 0);
 	}
+	//setup physics world
+	mWorld = new b2World(b2Vec2(0.0f, 9.8f));
 }
-
-void Editor::Update()
+void Editor::Update(sf::Clock deltaClock)
 {
 	mEntities.update();
 	sAnimation();
-	ImGui::SFML::Update(mGame->Window(), deltaClock.restart());
-
-	
+	ImGui::SFML::Update(mEngine->Window(), deltaClock.restart());
 }
 void Editor::sAnimation()
 {
@@ -98,11 +94,9 @@ void Editor::sAnimation()
 				else {
 					animation_component.animation.Update();
 				}
-
 			}
 		}
 	}
-
 }
 void Editor::drawBg()
 {
@@ -117,7 +111,7 @@ void Editor::drawBg()
 			pos *= mBackgroundLayer[i].getScale().x;
 			mBackgroundLayer[i].setPosition(sf::Vector2f((pos * x)-speed, 0));
 			//give it illusin of scrolling
-			mGame->Window().draw(mBackgroundLayer[i]);
+			mEngine->Window().draw(mBackgroundLayer[i]);
 			speed+=10.f;
 		}
 		scroll += 0.2f;
@@ -125,9 +119,8 @@ void Editor::drawBg()
 }
 void Editor::Render()
 {
-	mGame->Window().clear();
+	mEngine->Window().clear({ 97,83,109 });
 	drawBg();
-
 	if (mDebugGrid)
 	{
 		DrawGrid();
@@ -138,42 +131,44 @@ void Editor::Render()
 	}
 	for (auto e : mEntities.getEntities())
 	{
+		auto SCALE = 30.f;
 		auto& t = e->getComponent<CTransform>();
+		if(e->hasComponent<CRigidBody>())
+		{
+			//extract the rigid body component
+			auto& rigid_body = e->getComponent<CRigidBody>();
+			//get the body position
+			auto body_pos = rigid_body.body->GetPosition();
+			//set the transform position to the body position
+			t.position.x = body_pos.x * SCALE;
+			t.position.y = body_pos.y * SCALE;
+		}
 		if (e->hasComponent<CAnimation>())
 		{
 			auto& entity = e->getComponent<CAnimation>();
 			entity.animation.GetSprite().setRotation(t.angle);
 			entity.animation.GetSprite().setPosition(t.position.x, t.position.y);
 			entity.animation.GetSprite().setScale(t.scale.x, t.scale.y);
-			mGame->Window().draw(entity.animation.GetSprite());
+			mEngine->Window().draw(entity.animation.GetSprite());
 		}
-		if (e->hasComponent<CRenderable>())
+		else if( e->hasComponent<CRenderable>())
 		{
 			auto& entity = e->getComponent<CRenderable>();
-			entity.shape.setRotation(t.angle);
 			entity.shape.setPosition(t.position.x, t.position.y);
+			entity.shape.setRotation(t.angle);
 			entity.shape.setScale(t.scale.x, t.scale.y);
-			mGame->Window().draw(entity.shape);
+			//change size of shape using scale
+			mEngine->Window().draw(entity.shape);
 		}
 	}
-	//mRenderTexture.display();
-	//auto sprite = sf::Sprite(mRenderTexture.getTexture());
-	//mGame->Window().draw(sprite);
-	mGame->Window().draw(mMouseCursor);
-	
-
+	mEngine->Window().draw(mMouseCursor);
 	_imgui();
-
-
 }
-
 void Editor::DoAction(const Action& action)
 {
 	auto name = action.Name();
 	auto type = action.Type();
 	auto velocity = vec2(0.0f, 0.0f);
-	auto fElapsedTime = deltaClock.getElapsedTime();
-	deltaClock.restart();
 	const auto SPEED = 64;
 	if (type == "BEGIN")
 	{
@@ -207,17 +202,19 @@ void Editor::DoAction(const Action& action)
 			velocity.x = SPEED;
 		}	
 		else if (name == "Quit"){
-			mGame->Quit();
+			delete mSerializer;
+			mSerializer = nullptr;
+			mEngine->Quit();
 		}
 		else if (name == "Play")
 		{
-			mGame->ChangeScene("Play", std::make_shared<PlayGame>(mGame,  this));
+			mEngine->ChangeScene("Play", std::make_shared<PlayGame>(mEngine,  this));
 		}
 		else if (name == "Debug") {
 			mDebugGrid = !mDebugGrid;
 		}
 		else if (name == "LeftClick"){
-			for (auto e : mEntities.getEntities())
+			for (auto e : mEntities.getEntities()){
 				if (e->hasComponent<CDraggable>())
 				{
 					if (point_inside_entity(vec2(mMouseCursor.getPosition().x, mMouseCursor.getPosition().y), e))
@@ -226,8 +223,8 @@ void Editor::DoAction(const Action& action)
 						mSelectedEntity = e;
 						break;
 					}
-
 				}
+			}
 		}
 		//check if entity is clicked
 		if (name == "RightClick" || name == "MiddleClick")
@@ -255,24 +252,21 @@ void Editor::DoAction(const Action& action)
 				}
 			}
 		}
-		
 	}
 	else if (type == "MOUSEMOVE")
 	{
 		PlaceEntityBasedOnMouse (action.Position());
 	}
 }
-
-
 void Editor::DrawGrid()
 {
 	
-		auto width = (mGame->Window().getSize().x);
-		auto height = (mGame->Window().getSize().y);
-		auto view = mGame->Window().getView();
+		auto width = (mEngine->Window().getSize().x);
+		auto height = (mEngine->Window().getSize().y);
+		auto view = mEngine->Window().getView();
 		float leftX = view.getCenter().x - width / 2;
 		float rightX = leftX + width+ TILE_SIZE.x;
-		float topY = mGame->Window().getView().getCenter().y - height / 2;
+		float topY = mEngine->Window().getView().getCenter().y - height / 2;
 		float bottomY = topY + height + TILE_SIZE.y;
 		for (int i = 0; i < width; i++)
 		{
@@ -283,29 +277,27 @@ void Editor::DrawGrid()
 			drawLine({ leftX, topY + i * TILE_SIZE.y }, { rightX, topY + i * TILE_SIZE.y }, &mRenderTexture);
 		}
 }
-
-
 void Editor::DrawSelectableTexture()
 {
-	auto pos = mGame->Window().mapPixelToCoords(sf::Mouse::getPosition(mGame->Window()));
+	auto pos = mEngine->Window().mapPixelToCoords(sf::Mouse::getPosition(mEngine->Window()));
 	ImGui::Begin("Choose a Texture");
 	ImGui::Text("Mouse Pos (x: %f), (y: %f)", pos.x, pos.y);
 	int same_line = 0;
 	auto size = sf::Vector2f(64, 64);
 	int padding = 10;
 	int item_per_line = 5;
-	size_t total_item = mGame->GetAsset().getAnimationNames().size();
+	size_t total_item = mEngine->GetAsset().getAnimationNames().size();
 	size_t current = 0;
 	//make a button that creates n number of entties when clicked
 	
-	for (auto e : mGame->GetAsset().getAnimationNames())
+	for (auto e : mEngine->GetAsset().getAnimationNames())
 	{
 		// the char _ is just for creating texture from Atlas and later should be used in ANimation
 		if (!e.contains("_"))
 		{
 			++current;
 
-			ImGui::ImageButton(mGame->GetAsset().getAnimation(e).GetSprite(),
+			ImGui::ImageButton(mEngine->GetAsset().getAnimation(e).GetSprite(),
 				size, padding);
 			// place the text with of the image
 			if (same_line < item_per_line)
@@ -368,7 +360,6 @@ void Editor::DrawSelectableTexture()
 	// put the name of the texture in the window
 	ImGui::End();
 }
-
 void Editor::draw_sfml_primitive(const std::string& name, const vec2& pos)
 {
 	auto x = (int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x;
@@ -404,7 +395,6 @@ void Editor::draw_sfml_primitive(const std::string& name, const vec2& pos)
 		e->addComponent <CBoundingBox>(bouding_box_size);
 	}
 }
-
 void Editor::CreateNENTT(int count)
 {
 	auto mSelectedEntity_pos = mSelectedEntity->getComponent < CTransform >().position;
@@ -436,20 +426,19 @@ void Editor::CreateNENTT(int count)
 		}
 	}
 }
-
 void Editor::CreateSelectedEntity(const std::string& name, const vec2& pos, bool primitive)
 {
 	if (primitive) {
 		draw_sfml_primitive (name, pos);
 	}
 	else {
-		auto animation = mGame->GetAsset().getAnimation(name);
+		auto animation = mEngine->GetAsset().getAnimation(name);
 		auto entity = mEntities.addEntity(name);
 		auto x = (int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x;
 		auto y = (int)(pos.y / TILE_SIZE.y) * TILE_SIZE.y;
 		//this 3 cause I think it is essential  to the level editor
 		auto tc = entity->addComponent<CTransform>(vec2(x, y), vec2(1, 1), 0.f);
-		auto ac = entity->addComponent<CAnimation>(mGame->GetAsset().getAnimation(name), true);
+		auto ac = entity->addComponent<CAnimation>(mEngine->GetAsset().getAnimation(name), true);
 		entity->addComponent<CDraggable>();
 		entity->getComponent< CDraggable>().dragging = true;
 		auto anime_size = ac.animation.GetSize();
@@ -465,7 +454,7 @@ void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
 	const auto mouse_pos = sf::Vector2i(pos.x, pos.y);
 
 	//update the mouse cursor position based on the view
-	const auto delta = mGame->Window().mapPixelToCoords(mouse_pos) - mMouseCursor.getPosition();
+	const auto delta = mEngine->Window().mapPixelToCoords(mouse_pos) - mMouseCursor.getPosition();
 	//set the mouse cursor position to the new position
 	mMouseCursor.setPosition(mMouseCursor.getPosition() + delta);
 
@@ -473,8 +462,8 @@ void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
 	auto x = ((int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x) + TILE_SIZE.x / 2;
 	auto y = ((int)(pos.y / TILE_SIZE.y) * TILE_SIZE.y) + TILE_SIZE.y / 2;
 	//update x, y based on the view
-	x = mGame->Window().mapPixelToCoords(sf::Vector2i(x, y)).x;
-	y = mGame->Window().mapPixelToCoords(sf::Vector2i(x, y)).y;
+	x = mEngine->Window().mapPixelToCoords(sf::Vector2i(x, y)).x;
+	y = mEngine->Window().mapPixelToCoords(sf::Vector2i(x, y)).y;
 
 	for (auto e : mEntities.getEntities())
 	{
@@ -487,11 +476,9 @@ void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
 		}
 	}
 }
-
 void Editor::PropertyWindow(std::shared_ptr<Entity> e)
 {
 	//start imgui window
-	
 	if (ImGui::CollapsingHeader("Transform")) {
 
 		if (e->hasComponent<CTransform>())
@@ -508,14 +495,14 @@ void Editor::PropertyWindow(std::shared_ptr<Entity> e)
 			auto animation_name = animation.GetName();
 			if (ImGui::InputText("Name", &animation_name))
 			{
-				animation = mGame->GetAsset().getAnimation(animation_name);
+				animation = mEngine->GetAsset().getAnimation(animation_name);
 			}
 			ImGui::Text("Frame Count: %d", (int)animation.GetFrameCount());
 		}
 		else {
 			std::string name{};
 			ImGui::InputText("Name", &name[0], name.size());
-			auto animation = mGame->GetAsset().getAnimation(name);
+			auto animation = mEngine->GetAsset().getAnimation(name);
 			e->addComponent<CAnimation>(animation, true);
 		}
 	}
@@ -548,12 +535,74 @@ void Editor::PropertyWindow(std::shared_ptr<Entity> e)
 			bbc.size = vec2(x, y);
 			ImGui::Text("Width: %f, Height: %f", bbc.size.x, bbc.size.y);
 			//check box to add collider
-			bool boundingBox = false;
-			ImGui::Checkbox("Check to add Bounding Box", &boundingBox);
-			if (boundingBox)
+			ImGui::Checkbox("Check to add Bounding Box", &bbc.collidable);
+		}
+	}
+	//RigidBody
+	if (ImGui::CollapsingHeader("RigidBody")) {
+		if (e->hasComponent<CRigidBody>())
+		{
+			auto& rb = e->getComponent<CRigidBody>();
+			auto body_type = rb.body->GetType();
+			if (ImGui::RadioButton("Static", body_type == b2_staticBody))
 			{
-				//apply the scale to make new bounding box accounitng for the new size
-				bbc.collidable = true;
+				rb.body->SetType(b2_staticBody);
+			}
+			if (ImGui::RadioButton("Dynamic", body_type == b2_dynamicBody))
+			{
+				rb.body->SetType(b2_dynamicBody);
+			}
+			// friction, density, restitution etc options
+			float friction = rb.body->GetFixtureList()->GetFriction();
+			float density = rb.body->GetFixtureList()->GetDensity();
+			float restitution = rb.body->GetFixtureList()->GetRestitution();
+			ImGui::SliderFloat("Friction", &friction, 0.0f, 1.0f);
+			ImGui::SliderFloat("Density", &density, 0.0f, 1.0f);
+			ImGui::SliderFloat("Restitution", &restitution, 0.0f, 1.0f);
+			rb.fixture->SetFriction(friction);
+			rb.fixture->SetDensity(density);
+			rb.fixture->SetRestitution(restitution);
+		}
+		else {
+			bool active = false;
+			ImGui::Checkbox("Check to add RigidBody", &active);
+			if (active)
+			{
+				auto& rb = e->addComponent<CRigidBody>();
+				//create the body
+				b2BodyDef body_def;
+				//body type options
+				if (ImGui::RadioButton("Static", true))
+				{
+					body_def.type = b2_staticBody;
+				}
+				if (ImGui::RadioButton("Dynamic", false))
+				{
+					body_def.type = b2_dynamicBody;
+				}
+				//set the position
+				auto scale = 30.0f;
+				body_def.position.Set(e->getComponent<CTransform>().position.x / scale, e->getComponent<CTransform>().position.y / scale);
+				//set the angle
+				body_def.angle = e->getComponent<CTransform>().angle;
+				//add the body to the world and store the body pointer in the rigid body component
+				rb.body = mWorld->CreateBody(&body_def);
+				//create the fixture
+				b2PolygonShape shape;
+				//set the shape size
+				auto anime_size = e->getComponent<CAnimation>().animation.GetSize();
+				auto x = anime_size.x * e->getComponent<CTransform>().scale.x;
+				auto y = anime_size.y * e->getComponent<CTransform>().scale.y;
+				shape.SetAsBox(x / scale, y / scale);
+				//create the fixture def
+				b2FixtureDef fixture_def;
+				fixture_def.shape = &shape;
+				//fixture properties options
+				ImGui::InputFloat("Friction", &fixture_def.friction);
+				ImGui::InputFloat("Restitution", &fixture_def.restitution);
+				ImGui::InputFloat("Density", &fixture_def.density);
+				//add the fixture to the body
+				rb.fixture = rb.body->CreateFixture(&fixture_def);
 			}
 		}
 	}
@@ -594,46 +643,6 @@ void Editor::DrawVec2Control(const std::string& label, vec2& values, const vec2&
 	ImGui::Columns(1);
 	ImGui::PopID();
 }
-std::string Editor::OpenFileDialog(const char* filter) noexcept
-{
-	auto window_handle = mGame->Window().getSystemHandle();
-	char path[260] = {0};
-	OPENFILENAMEA ofn{};
-	ZeroMemory (&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = path;
-	ofn.hwndOwner = window_handle;
-	ofn.nMaxFile = sizeof(path);
-	ofn.lpstrFilter = filter;
-	ofn.nFilterIndex = 1;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-	if (GetOpenFileNameA(&ofn))
-	{
-		return path;
-	}
-	return  "";
-	
-}
-std::string Editor::SaveFileDialog(const char* filter) noexcept
-{
-	auto window_handle = mGame->Window().getSystemHandle();
-	char path[260] = {0};
-	OPENFILENAMEA ofn{};
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = path;
-	ofn.hwndOwner = window_handle;
-	ofn.nMaxFile = sizeof(path);
-	ofn.lpstrFilter = filter;
-	ofn.nFilterIndex = 1;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-	if (GetSaveFileNameA(&ofn))
-	{
-		return path;
-	}
-	return "";
-}
-
 void Editor::FileDialogUI()
 {
 	ImGui::Begin("File##");
@@ -648,19 +657,19 @@ void Editor::FileDialogUI()
 			if (!path.empty())
 			{
 				mEntities.removeAllEntities();
-				mSerializer.Deserialize(path);
+				mSerializer->Deserialize(path);
 			}
 		}
 		if (ImGui::MenuItem("Save"))
 		{
-			mSerializer.Serialize(mLastOpenedFile);
+			mSerializer->Serialize(mLastOpenedFile);
 		}
 		if (ImGui::MenuItem("Save As"))
 		{
 			auto path = SaveFileDialog();
 			if (!path.empty())
 			{
-				mSerializer.Serialize(path);
+				mSerializer->Serialize(path);
 				mLastOpenedFile = path;
 			}
 		}
@@ -706,33 +715,31 @@ void Editor::DrawSelectedEntityBoarder()
 	//rect.setOrigin({ -TILE_SIZE.x / 2, -TILE_SIZE.y / 2 });
 	rect.setRotation( t.angle );
 	rect.setScale( t.scale.x, t.scale.y );
-	mGame->Window().draw(rect);
+	mEngine->Window().draw(rect);
 }
-
 void Editor::MoveScreenView(const vec2& dir)
 {
 	auto mMapSize = 6000;
-	auto view = mGame->Window().getView();
-	if (view.getCenter().x + dir.x < mMapSize- view.getSize().x / 2 && view.getCenter().x + dir.x > view.getSize().x / 2)
+	auto view = mEngine->Window().getView();
+	//only scroll if we are not at the edge of the map [ 0, MapSize ]
+	if (view.getCenter().x + dir.x < mMapSize && view.getCenter().x + dir.x > mMapSize/10)
 	{
-		view.move(dir.x, 0);
-		auto speed = 1;
-		scroll = dir.x;
+		view.move(dir.x, dir.y);
 	}
-	mGame->Window().setView(view);
+	mEngine->Window().setView(view);
 	
 }
 void Editor::ZoomIN()
 {
-	auto view = mGame->Window().getView();
+	auto view = mEngine->Window().getView();
 	view.zoom(mZoomFactor);
-	mGame->Window().setView(view);
+	mEngine->Window().setView(view);
 }
 void Editor::ZoomOut()
 {
-	auto view = mGame->Window().getView();
+	auto view = mEngine->Window().getView();
 	view.zoom(1/ mZoomFactor);
-	mGame->Window().setView(view);
+	mEngine->Window().setView(view);
 }
 void Editor::_imgui()
 {
@@ -753,20 +760,64 @@ void Editor::_imgui()
 	}
 	FileDialogUI();
 	ImGui::End();
-	ImGui::SFML::Render(mGame->Window());
+	ImGui::SFML::Render(mEngine->Window());
 }
-
-
-
+std::string Editor::OpenFileDialog(const char* filter) noexcept
+{
+	auto window_handle = mEngine->Window().getSystemHandle();
+	char path[260] = {0};
+	OPENFILENAMEA ofn{};
+	ZeroMemory (&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.lpstrFile = path;
+	ofn.hwndOwner = window_handle;
+	ofn.nMaxFile = sizeof(path);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+	if (GetOpenFileNameA(&ofn))
+	{
+		return path;
+	}
+	return  "";
+	
+}
+std::string Editor::SaveFileDialog(const char* filter) noexcept
+{
+	auto window_handle = mEngine->Window().getSystemHandle();
+	char path[260] = {0};
+	OPENFILENAMEA ofn{};
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.lpstrFile = path;
+	ofn.hwndOwner = window_handle;
+	ofn.nMaxFile = sizeof(path);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+	if (GetSaveFileNameA(&ofn))
+	{
+		return path;
+	}
+	return "";
+}
 //////////////////////Play Game Class starts here/////////////////////////////////////
-#pragma region PlayGame
 
+#pragma region PlayGame
 PlayGame::PlayGame(Engine* engine, Editor* editor, const std::string& scene_name)
 	:Scene(engine)
 {
 	mSceneName = scene_name;
 	mEditor = editor;
 	Init();
+}
+PlayGame::~PlayGame()
+{
+	mEntities.removeAllEntities();
+	delete mSerializer;
+	delete mWorld;
+	mSerializer = nullptr;
+	mWorld = nullptr;
 }
 void PlayGame::Init()
 {
@@ -775,76 +826,17 @@ void PlayGame::Init()
 	registerAction(sf::Keyboard::A, "Left");
 	registerAction(sf::Keyboard::D, "Right");
 	registerAction(sf::Keyboard::Escape, "Quit");
-	
+
 	mEntities.removeAllEntities();
-	for( auto& e : mEditor->mEntities.getEntities())
-	{
-		auto entity = mEntities.addEntity(e->Tag());
-		if(e->hasComponent<CTransform>())
-		{ entity->addComponent<CTransform>(e->getComponent<CTransform>());}
-		if(e->hasComponent<CGravity>())
-		{ entity->addComponent<CGravity>(e->getComponent<CGravity>());}
-		if(e->hasComponent<CHealth>())
-		{ entity->addComponent<CHealth>(e->getComponent<CHealth>());}
-		if(e->hasComponent<CInput>())
-		{ entity->addComponent<CInput>(e->getComponent<CInput>());}
-		if(e->hasComponent<CBoundingBox>())
-		{ entity->addComponent<CBoundingBox>(e->getComponent<CBoundingBox>());}
-		if(e->hasComponent<CState>())
-		{ entity->addComponent<CState>(e->getComponent<CState>());}
-		if(e->hasComponent<CAnimation>())
-		{ entity->addComponent<CAnimation>(e->getComponent<CAnimation>());}
-		auto anim = entity->getComponent<CAnimation>();
-		if (anim.animation.GetName() == "player")
-		{
-			std::cout << anim.animation.GetName() << std::endl;
-			mPlayer = entity;
-			//attach input to player
-			 mPlayer->addComponent<CInput>();
-		}
-	}
-	
+	mSerializer = new SceneSerializer(this);
+	mSerializer->Deserialize(mEditor->mLastOpenedFile);
+	mWorld = new b2World(b2Vec2(0.0f, 9.8f));
 }
-void PlayGame::Update()
+void PlayGame::Update(sf::Clock deltaClock)
 {
 	mEntities.update();
-	
-	//move mPlayer
-	auto elpasedTime = deltaClock.getElapsedTime();
+	auto elapsedTime = deltaClock.getElapsedTime();
 	deltaClock.restart();
-	#if 0
-	try
-	{
-		auto input = mPlayer->getComponent<CInput>();
-		auto& tc = mPlayer->getComponent<CTransform>();
-		vec2 move = { 0,0 };
-		//deltaClock
-	
-		if (input.up)
-		{
-			move.y -= 64;
-		}
-		if (input.down)
-		{
-			move.y += 64;
-		}
-		if (input.left)
-		{
-			move.x -= 64;
-		}
-		if (input.right)
-		{
-			move.x += 64;
-		}
-		move *= elpasedTime.asSeconds();
-		tc.velocity = move;
-		tc.position += tc.velocity;
-	}
-	catch (std::exception e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	#endif
 }
 void PlayGame::Render()
 {
@@ -857,46 +849,24 @@ void PlayGame::Render()
 			auto& entity = e->getComponent<CAnimation>();
 			entity.animation.GetSprite().setRotation(t.angle);
 			entity.animation.GetSprite().setPosition(t.position.x, t.position.y);
-			mGame->Window().draw(entity.animation.GetSprite());
+			mEngine->Window().draw(entity.animation.GetSprite());
 		}
 	}
 }
 void PlayGame::DoAction(const Action& action)
 {
-	//auto type = action.Type();
-	//auto name = action.Name();
-	//if (type == "BEGIN")
-	//{
-	//	if (name == "UP") {
-	//		mPlayer->getComponent<CInput>().up = true;
-	//	}
-	//	else if (name == "Right") {
-	//		mPlayer->getComponent<CInput>().right = true;
-	//	}
-	//	else if (name == "Left") {
-	//		mPlayer->getComponent<CInput>().left = true;
-	//	}
-	//	else if (name == "Down") {
-	//		mPlayer->getComponent<CInput>().down = true;
-	//	}
-	//}
-	//if (type == "END")
-	//{
-	//	if (name == "UP") {
-	//		mPlayer->getComponent<CInput>().up = false;
-	//	}
-	//	else if (name == "Right") {
-	//		mPlayer->getComponent<CInput>().right = false;
-	//	}
-	//	else if (name == "Left") {
-	//		mPlayer->getComponent<CInput>().left = false;
-	//	}
-	//	else if (name == "Down") {
-	//		mPlayer->getComponent<CInput>().down = false;
-	//	}
-	//	else if (name == "Quit") {
-	//		mGame->ChangeScene(mSceneName);
-	//	}
-	//}
+	auto type = action.Type();
+	auto name = action.Name();
+	if (type == "BEGIN")
+	{
+	}
+	if (type == "END")
+	{
+		if (name == "Quit") {
+			delete mSerializer;
+			mSerializer = nullptr;
+			mEngine->ChangeScene(mSceneName);
+		}
+	}
 }
 #pragma endregion

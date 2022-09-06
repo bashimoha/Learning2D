@@ -32,6 +32,6 @@ private:
 	size_t mWindowHeight{ DEFAULT_HEIGHT };
 	void Update();
 	void Input();
-
+	sf::Clock clock;
 };
 

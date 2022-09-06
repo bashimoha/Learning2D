@@ -4,6 +4,24 @@
     <Filter Include="$(SolutionDir)3rdparty">
       <UniqueIdentifier>{6FF4F445-5BEE-1D98-445B-B4A830F48304}</UniqueIdentifier>
     </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d">
+      <UniqueIdentifier>{FD052B44-E9C0-1AF0-9278-933A7E126580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d\src">
+      <UniqueIdentifier>{947A23CE-80CB-0E10-A92F-FDD195DFA179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d\src\collision">
+      <UniqueIdentifier>{CF18A415-BB80-6AE3-24EC-7EF9107381CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d\src\common">
+      <UniqueIdentifier>{6C6D3B2F-D8FC-FC19-E1F8-DD314D073826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d\src\dynamics">
+      <UniqueIdentifier>{9B8E4FDB-07A9-B27C-50CB-C210BC24DA83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(SolutionDir)3rdparty\box2d\src\rope">
+      <UniqueIdentifier>{F9202E0E-65E5-2CFE-2E4B-5DC89ACEC833}</UniqueIdentifier>
+    </Filter>
     <Filter Include="$(SolutionDir)3rdparty\imgui">
       <UniqueIdentifier>{1959A844-0514-98F0-AECB-103B9A65E280}</UniqueIdentifier>
     </Filter>
@@ -15,6 +33,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_circle_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_polygon_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_circle_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_solver.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_circle_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_polygon_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_island.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_circle_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_contact.h">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClInclude>
     <ClInclude Include="$(SolutionDir)3rdparty\imgui\imgui.h">
       <Filter>$(SolutionDir)3rdparty\imgui</Filter>
     </ClInclude>
@@ -45,10 +90,10 @@
     <ClInclude Include="src\EntityManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game.h">
+    <ClInclude Include="src\Scene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene.h">
+    <ClInclude Include="src\SceneSerializer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Vec2.h">
@@ -59,6 +104,141 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_broad_phase.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_chain_shape.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_circle_shape.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_circle.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_edge.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collide_polygon.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_collision.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_distance.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_dynamic_tree.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_edge_shape.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_polygon_shape.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\collision\b2_time_of_impact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_block_allocator.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_draw.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_math.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_settings.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_stack_allocator.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\common\b2_timer.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_body.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_circle_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_chain_polygon_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_circle_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_manager.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_contact_solver.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_distance_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_circle_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_edge_polygon_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_fixture.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_friction_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_gear_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_island.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_motor_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_mouse_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_circle_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_polygon_contact.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_prismatic_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_pulley_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_revolute_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_weld_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_wheel_joint.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_world.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\dynamics\b2_world_callbacks.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)3rdparty\box2d\src\rope\b2_rope.cpp">
+      <Filter>$(SolutionDir)3rdparty\box2d\src\rope</Filter>
+    </ClCompile>
     <ClCompile Include="$(SolutionDir)3rdparty\imgui-sfml\imgui-SFML.cpp">
       <Filter>$(SolutionDir)3rdparty\imgui-sfml</Filter>
     </ClCompile>
@@ -80,10 +260,10 @@
     <ClCompile Include="src\EntityManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
+    <ClCompile Include="src\Scene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
+    <ClCompile Include="src\SceneSerializer.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\bs.cpp">
