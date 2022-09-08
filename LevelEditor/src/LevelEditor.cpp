@@ -67,6 +67,8 @@ void Editor::Update(sf::Clock deltaClock)
 	mEntities.update();
 	sAnimation();
 	ImGui::SFML::Update(mEngine->Window(), deltaClock.restart());
+	//step  physics world
+	mWorld->Step(1.0f / 60.0f, 8, 3);
 }
 void Editor::sAnimation()
 {
@@ -133,16 +135,7 @@ void Editor::Render()
 	{
 		auto SCALE = 30.f;
 		auto& t = e->getComponent<CTransform>();
-		if(e->hasComponent<CRigidBody>())
-		{
-			//extract the rigid body component
-			auto& rigid_body = e->getComponent<CRigidBody>();
-			//get the body position
-			auto body_pos = rigid_body.body->GetPosition();
-			//set the transform position to the body position
-			t.position.x = body_pos.x * SCALE;
-			t.position.y = body_pos.y * SCALE;
-		}
+		
 		if (e->hasComponent<CAnimation>())
 		{
 			auto& entity = e->getComponent<CAnimation>();
@@ -835,15 +828,26 @@ void PlayGame::Init()
 void PlayGame::Update(sf::Clock deltaClock)
 {
 	mEntities.update();
-	auto elapsedTime = deltaClock.getElapsedTime();
 	deltaClock.restart();
+	mWorld->Step(1.0f / 60.0f, 8, 3);
 }
 void PlayGame::Render()
 {
-	std::cout << " I am in PlayGame" << std::endl;
+	
 	for (auto e : mEntities.getEntities())
 	{
+		auto SCALE = 30.0f;
 		auto& t = e->getComponent<CTransform>();
+		if (e->hasComponent<CRigidBody>())
+		{
+			//extract the rigid body component
+			auto& rigid_body = e->getComponent<CRigidBody>();
+			//get the body position
+			auto body_pos = rigid_body.body->GetPosition();
+			//set the transform position to the body position
+			t.position.x = body_pos.x * SCALE;
+			t.position.y = body_pos.y * SCALE;
+		}
 		if (e->hasComponent<CAnimation>())
 		{
 			auto& entity = e->getComponent<CAnimation>();

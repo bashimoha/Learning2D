@@ -85,7 +85,6 @@ void SceneSerializer::Serialize(const std::string filepath)
 {
 	YAML::Emitter out;
 	out << YAML::BeginMap;
-	out << YAML::Key << "Scene" << YAML::Value << "Untitled";
 	out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 	for (const auto e: mScene->mEntities.getEntities())
 	{
@@ -187,16 +186,10 @@ static void SerializeEntity(YAML::Emitter& out, std::shared_ptr<Entity> entity) 
 		out << YAML::Key << "Friction" << YAML::Value << f->GetFriction();
 		out << YAML::Key << "Restitution" << YAML::Value << f->GetRestitution();
 		out << YAML::EndMap;
-		out << YAML::Key << "Body" << YAML::Value << YAML::BeginMap;
-		out << YAML::Key << "Type" << YAML::Value << rb.body->GetType();
-		out << YAML::Key << "Fixed Rotation" << YAML::Value << rb.body->IsFixedRotation();
-		//position
-		out << YAML::Key << "Position" << YAML::Value << YAML::BeginMap;
-		out << YAML::Key << "X" << YAML::Value << rb.body->GetPosition().x;
-		out << YAML::Key << "Y" << YAML::Value << rb.body->GetPosition().y;
-		out << YAML::EndMap;
-
-		out<< YAML::EndMap;
+		auto t = rb.body->GetType();
+		out << YAML::Key << "Type" << YAML::Value << t;
+		auto pos = vec2(rb.body->GetPosition().x, rb.body->GetPosition().y);
+		out << YAML::Key << "Position" << YAML::Value << pos;
 		out << YAML::EndMap;
 	}
 	out << YAML::EndMap;
@@ -219,8 +212,6 @@ bool SceneSerializer::Deserialize(std::string filepath)
 		return false;
 	}
 	// get the scene name
-	std::string sceneName = node["Scene"].as<std::string>();
-	//scene->setName(sceneName);
 	// get the entities
 	auto entities = node["Entities"];
 	if( entities)
@@ -303,21 +294,23 @@ bool SceneSerializer::Deserialize(std::string filepath)
 			if (rbc)
 			{
 				auto fixture = rbc["Fixture"];
-				auto body = rbc["Body"];
 				auto density = fixture["Density"].as<float>();
 				auto friction = fixture["Friction"].as<float>();
 				auto restitution = fixture["Restitution"].as<float>();
-				auto type = body["Type"].as<b2BodyType>();
-				auto fixedRotation = body["Fixed Rotation"].as<bool>();
-				auto position = body["Position"];
-				auto x = position["X"].as<float>();
-				auto y = position["Y"].as<float>();
-				auto& rb = e->addComponent<CRigidBody>();
 				//create the body
 				b2BodyDef bodyDef;
-				bodyDef.type = type;
-				bodyDef.fixedRotation = fixedRotation;
-				bodyDef.position.Set(x, y);
+				auto type = rbc["Type"].as<int>();
+				switch (type)
+				{
+				case 0: bodyDef.type = b2_dynamicBody; break;
+
+				case 1: bodyDef.type = b2_staticBody; break;
+
+				case 2:bodyDef.type = b2_kinematicBody; break;
+				}
+				auto p = rbc["Position"].as<vec2>();
+				auto& rb = e->addComponent<CRigidBody>();
+				bodyDef.position.Set(p.x, p.y);
 				rb.body = mScene->mWorld->CreateBody(&bodyDef);
 				//create the fixture
 				b2PolygonShape shape;

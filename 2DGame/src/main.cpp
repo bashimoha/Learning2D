@@ -91,9 +91,9 @@
 int main()
 {
 	//change directory to  2DGame
-	auto cwd = std::filesystem::current_path();
-	cwd.append("2DGame");
-	std::filesystem::current_path(cwd);
+	//auto cwd = std::filesystem::current_path();
+	//cwd.append("2DGame");
+	//std::filesystem::current_path(cwd);
 
 	Engine engine("assets/config.txt");
 	engine.ChangeScene("Editor", std::make_shared<Editor> (&engine));
