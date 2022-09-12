@@ -1,24 +1,10 @@
 Entities:
-  - "Entity ": 12
+  - "Entity ": 0
     Tag: betterDirt
     Transform Component:
-      Position: [442.666656, 242.46405]
+      Position: [421.333344, 691.909668]
       velocity: [1, 1]
-      Scale: [13.6999998, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 13
-    Tag: betterDirt
-    Transform Component:
-      Position: [357.333344, 325.256683]
-      velocity: [1, 1]
-      Scale: [1, 17.8999996]
+      Scale: [24.8999996, 1.79999995]
       Rotation: 0
     Bounding Box Component:
       Bounding Box: [31, 23]
@@ -29,183 +15,29 @@ Entities:
       Draggable: false
     Rigid Body Component:
       Fixture:
-        Density: 0.652999997
+        Density: 0
         Friction: 0.200000003
         Restitution: 0
-      Type: 2
-      Position: [13.9594431, 7105.146]
-  - "Entity ": 14
-    Tag: betterDirt
+      Type: 1
+      Position: [14.044445, 23.0636559]
+  - "Entity ": 1
+    Tag: 12
     Transform Component:
-      Position: [538.666626, 289.774109]
+      Position: [360, 312]
       velocity: [1, 1]
-      Scale: [1, 1]
+      Scale: [3.5999999, 4.0999999]
       Rotation: 0
     Bounding Box Component:
-      Bounding Box: [31, 23]
+      Bounding Box: [25, 23]
     Animation Component:
-      Name: betterDirt
+      Name: 12
       Repeat: true
     Draggable Component:
       Draggable: false
     Rigid Body Component:
       Fixture:
-        Density: 0.727999985
-        Friction: 0.200000003
-        Restitution: 0
+        Density: 0.59799999
+        Friction: 0.245000005
+        Restitution: 0.842000008
       Type: 2
-      Position: [17.955555, 7.87747288]
-  - "Entity ": 15
-    Tag: betterDirt
-    Transform Component:
-      Position: [554.166626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 16
-    Tag: betterDirt
-    Transform Component:
-      Position: [569.666626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 17
-    Tag: betterDirt
-    Transform Component:
-      Position: [585.166626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 18
-    Tag: betterDirt
-    Transform Component:
-      Position: [600.666626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 19
-    Tag: betterDirt
-    Transform Component:
-      Position: [616.166626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 20
-    Tag: betterDirt
-    Transform Component:
-      Position: [631.666626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 21
-    Tag: betterDirt
-    Transform Component:
-      Position: [647.166626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 22
-    Tag: betterDirt
-    Transform Component:
-      Position: [662.666626, 289.774109]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [31, 23]
-    Animation Component:
-      Name: betterDirt
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 23
-    Tag: rock1
-    Transform Component:
-      Position: [528, 183.326492]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [20, 11]
-    Animation Component:
-      Name: rock1
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 24
-    Tag: 1
-    Transform Component:
-      Position: [240, 124.188919]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [93, 95]
-    Animation Component:
-      Name: 1
-      Repeat: true
-    Draggable Component:
-      Draggable: false
-  - "Entity ": 25
-    Tag: 6
-    Transform Component:
-      Position: [208, 360.739227]
-      velocity: [1, 1]
-      Scale: [1, 1]
-      Rotation: 0
-    Bounding Box Component:
-      Bounding Box: [73, 96]
-    Animation Component:
-      Name: 6
-      Repeat: true
-    Draggable Component:
-      Draggable: false
+      Position: [12, 70.5638504]

@@ -16,4 +16,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Vec2.h"
+
+constexpr int PIXEL_SCALE_FACTOR = 30;
+
 #endif

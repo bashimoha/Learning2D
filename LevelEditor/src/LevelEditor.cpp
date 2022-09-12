@@ -38,11 +38,10 @@ Editor::~Editor()
 }
 void Editor::Init()
 {
-	std::string title{ "Level Editor" };
 	
 	auto window_size = mEngine->Window().getSize();
-	mEngine->Window().create(sf::VideoMode(window_size.x, window_size.y), title, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-	mEngine->Window().setTitle(title);
+	mEngine->Window().create(sf::VideoMode(window_size.x, window_size.y), mSceneName, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+	mEngine->Window().setTitle(mSceneName);
 
 	mMouseCursor.setRadius(10.0f);
 	mMouseCursor.setPointCount(40);
@@ -61,6 +60,16 @@ void Editor::Init()
 	}
 	//setup physics world
 	mWorld = new b2World(b2Vec2(0.0f, 9.8f));
+	//populate the world with entities
+	//create a ground
+		//crete ground
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0.0f, -10.0f);
+	b2Body* groundBody = mWorld->CreateBody(&groundBodyDef);
+	b2PolygonShape groundBox;
+	//it should take the whole width of the screen
+	groundBox.SetAsBox(window_size.x, window_size.y-10.0f);
+	groundBody->CreateFixture(&groundBox, 0.0f);
 }
 void Editor::Update(sf::Clock deltaClock)
 {
@@ -201,6 +210,7 @@ void Editor::DoAction(const Action& action)
 		}
 		else if (name == "Play")
 		{
+			mSerializer->Serialize(mLastOpenedFile);
 			mEngine->ChangeScene("Play", std::make_shared<PlayGame>(mEngine,  this));
 		}
 		else if (name == "Debug") {
@@ -464,7 +474,10 @@ void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
 		{
 			if (e->getComponent<CDraggable>().dragging)
 			{
-				e->getComponent<CTransform>().position = vec2(x, y);
+				auto& p = e->getComponent<CTransform>();
+				p.position= vec2(x, y);
+				if(e->hasComponent<CRigidBody>())
+					e->getComponent<CRigidBody>().body->SetTransform({ x / 30, y / 30 }, p.angle);
 			}
 		}
 	}
@@ -651,6 +664,7 @@ void Editor::FileDialogUI()
 			{
 				mEntities.removeAllEntities();
 				mSerializer->Deserialize(path);
+				mLastOpenedFile = path;
 			}
 		}
 		if (ImGui::MenuItem("Save"))
@@ -822,21 +836,21 @@ void PlayGame::Init()
 
 	mEntities.removeAllEntities();
 	mSerializer = new SceneSerializer(this);
-	mSerializer->Deserialize(mEditor->mLastOpenedFile);
 	mWorld = new b2World(b2Vec2(0.0f, 9.8f));
+	mSerializer->Deserialize(mEditor->mLastOpenedFile);
 }
 void PlayGame::Update(sf::Clock deltaClock)
 {
 	mEntities.update();
 	deltaClock.restart();
-	mWorld->Step(1.0f / 60.0f, 8, 3);
+	mWorld->Step(1.0f / 6000.0f, 8, 3);
 }
 void PlayGame::Render()
 {
 	
 	for (auto e : mEntities.getEntities())
 	{
-		auto SCALE = 30.0f;
+		auto SCALE = 30;
 		auto& t = e->getComponent<CTransform>();
 		if (e->hasComponent<CRigidBody>())
 		{
@@ -847,12 +861,15 @@ void PlayGame::Render()
 			//set the transform position to the body position
 			t.position.x = body_pos.x * SCALE;
 			t.position.y = body_pos.y * SCALE;
+			std::cout << t.position.x << ", " << t.position.y << std::endl;
 		}
 		if (e->hasComponent<CAnimation>())
 		{
 			auto& entity = e->getComponent<CAnimation>();
 			entity.animation.GetSprite().setRotation(t.angle);
 			entity.animation.GetSprite().setPosition(t.position.x, t.position.y);
+			entity.animation.GetSprite().setScale(t.scale.x, t.scale.y);
+
 			mEngine->Window().draw(entity.animation.GetSprite());
 		}
 	}
@@ -869,7 +886,7 @@ void PlayGame::DoAction(const Action& action)
 		if (name == "Quit") {
 			delete mSerializer;
 			mSerializer = nullptr;
-			mEngine->ChangeScene(mSceneName);
+			mEngine->ChangeScene(mEditor->mSceneName);
 		}
 	}
 }

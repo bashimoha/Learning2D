@@ -200,7 +200,6 @@ bool SceneSerializer::Deserialize(std::string filepath)
 {
 	//print out the current working directory
 	
-	std::cout << "Current working directory is: " << std::filesystem::current_path() << std::endl;
 	YAML::Node node;
 
 	try {

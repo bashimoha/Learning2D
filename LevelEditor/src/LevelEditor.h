@@ -51,11 +51,12 @@ private:
 	bool mDebugGrid{ false };
 	std::shared_ptr<Entity> mSelectedEntity{};
 	std::string mLastOpenedFile = "";
+	const std::string mSceneName{ "Editor" };
 };
 class PlayGame : public Scene
 {
 public:
-	PlayGame(Engine* engine,Editor* editor ,const std::string& scene_name = "LevelEditor");
+	PlayGame(Engine* engine,Editor* editor ,const std::string& scene_name = "Scene play");
 	~PlayGame() override;
 	void Init();
 	void Update(sf::Clock deltaClock) override;
