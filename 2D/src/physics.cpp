@@ -30,3 +30,31 @@ bool point_inside_entity(const vec2& point, const std::shared_ptr<Entity> e)
 		bb.y / 2);
 	return rect.getGlobalBounds().contains(point.x, point.y);
 }
+
+//box 2d conversion stuff
+vec2 b2vec_to_vec2(const b2Vec2& b2vec)
+{
+	return vec2(b2vec.x, b2vec.y);
+}
+b2Vec2 vec2_to_b2vec(const vec2& vec)
+{
+	return b2Vec2(vec.x, vec.y);
+}
+float to_radians(float b2angle)
+{
+	return b2angle * b2_pi / 180.0f;
+}
+float to_degrees(float b2angle)
+{
+	return b2angle * 180.0f / b2_pi;
+}
+//convert a b2 world position to a screen position
+vec2 world_to_screen(const vec2& world_pos)
+{
+	return vec2(world_pos.x * PIXEL_SCALE_FACTOR, world_pos.y * PIXEL_SCALE_FACTOR);
+}
+//convert a screen position to a b2 world position
+vec2 screen_to_world(const vec2& screen_pos)
+{
+	return vec2(screen_pos.x / PIXEL_SCALE_FACTOR, screen_pos.y / PIXEL_SCALE_FACTOR);
+}

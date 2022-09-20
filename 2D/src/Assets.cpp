@@ -78,7 +78,7 @@ void Assets::addTextureAtlas(const std::string& name, const std::string& path)
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "Failed to load texture atlas: " << path << std::endl;
+		std::cout << "Failed to load texture atlas: " << path << e.what() << std::endl;
 		return;
 	}
 	mTextureAtlases[name] = image;

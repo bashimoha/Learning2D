@@ -1,0 +1,64 @@
+Entities:
+  - "Entity ": 0
+    Tag: betterDirt
+    Transform Component:
+      Position: [570.666626, 573.921997]
+      velocity: [1, 1]
+      Scale: [22.5, 1]
+      Rotation: 0
+    Bounding Box Component:
+      Bounding Box: [31, 23]
+    Animation Component:
+      Name: betterDirt
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+    Rigid Body Component:
+      Fixture:
+        Density: 0
+        Friction: 0.200000003
+        Restitution: 0
+      Type: 0
+      Position: [19.0222206, 19.1307335]
+  - "Entity ": 1
+    Tag: betterDirt
+    Transform Component:
+      Position: [613.333313, 218.809036]
+      velocity: [1, 1]
+      Scale: [1, 1]
+      Rotation: 0
+    Bounding Box Component:
+      Bounding Box: [31, 23]
+    Animation Component:
+      Name: betterDirt
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+    Rigid Body Component:
+      Fixture:
+        Density: 0.272000015
+        Friction: 0
+        Restitution: 1
+      Type: 2
+      Position: [20.4444447, 7.29363441]
+  - "Entity ": 2
+    Tag: betterDirt
+    Transform Component:
+      Position: [634.666687, 502.669403]
+      velocity: [1, 1]
+      Scale: [30.7999992, 1]
+      Rotation: 0
+    Bounding Box Component:
+      Bounding Box: [31, 23]
+    Animation Component:
+      Name: betterDirt
+      Repeat: true
+    Draggable Component:
+      Draggable: false
+    Rigid Body Component:
+      Fixture:
+        Density: 0
+        Friction: 0.200000003
+        Restitution: 0
+      Type: 2
+      Position: [21.1555557, 16.7556477]

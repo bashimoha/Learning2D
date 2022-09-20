@@ -3,7 +3,7 @@
 
 
 Animation::Animation(const std::string& name, const sf::Texture& texture, size_t frameCount, float speed)
-	:mName(name), mTotalFrames(frameCount), mSpeed(speed), mSprite(texture)
+	:mName(name), mTotalFrames(frameCount), mSpeed((size_t)speed), mSprite(texture)
 {
 	mSize = vec2( (float)texture.getSize().x / frameCount, 
 		          (float)texture.getSize().y

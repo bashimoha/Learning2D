@@ -48,7 +48,7 @@ void Editor::Init()
 	mMouseCursor.setFillColor(sf::Color::Red);
 	mMouseCursor.setOrigin(mMouseCursor.getRadius(), mMouseCursor.getRadius());
 	auto pos = sf::Mouse::getPosition();
-	mMouseCursor.setPosition(sf::Vector2f(pos.x, pos.y));
+	mMouseCursor.setPosition(sf::Vector2f((float)pos.x, (float)pos.y));
 	mMouseCursor.setOutlineColor(sf::Color::Black);
 	for (size_t i = 0; i < BACKGROUNDLAYERS; i++)
 	{
@@ -131,10 +131,10 @@ void Editor::drawBg()
 void Editor::Render()
 {
 	mEngine->Window().clear({ 97,83,109 });
-	drawBg();
+	//drawBg();
 	if (mDebugGrid)
 	{
-		DrawGrid();
+		DrawGrid(mEngine->Window());
 	}
 	if (mSelectedEntity)
 	{
@@ -210,6 +210,11 @@ void Editor::DoAction(const Action& action)
 		}
 		else if (name == "Play")
 		{
+			if (mLastOpenedFile == "")
+			{
+				mLastOpenedFile = "temp.level";
+				
+			}
 			mSerializer->Serialize(mLastOpenedFile);
 			mEngine->ChangeScene("Play", std::make_shared<PlayGame>(mEngine,  this));
 		}
@@ -261,7 +266,7 @@ void Editor::DoAction(const Action& action)
 		PlaceEntityBasedOnMouse (action.Position());
 	}
 }
-void Editor::DrawGrid()
+void Editor::DrawGrid(sf::RenderWindow& target)
 {
 	
 		auto width = (mEngine->Window().getSize().x);
@@ -273,11 +278,11 @@ void Editor::DrawGrid()
 		float bottomY = topY + height + TILE_SIZE.y;
 		for (int i = 0; i < width; i++)
 		{
-			drawLine({ leftX + i * TILE_SIZE.x, topY }, { leftX + i * TILE_SIZE.x, bottomY }, &mRenderTexture);
+			drawLine({ leftX + i * TILE_SIZE.x, topY }, { leftX + i * TILE_SIZE.x, bottomY }, &target);
 		}
 		for (int i = 0; i < height; i++)
 		{
-			drawLine({ leftX, topY + i * TILE_SIZE.y }, { rightX, topY + i * TILE_SIZE.y }, &mRenderTexture);
+			drawLine({ leftX, topY + i * TILE_SIZE.y }, { rightX, topY + i * TILE_SIZE.y }, &target);
 		}
 }
 void Editor::DrawSelectableTexture()
@@ -465,8 +470,8 @@ void Editor::PlaceEntityBasedOnMouse(const vec2& pos)
 	auto x = ((int)(pos.x / TILE_SIZE.x) * TILE_SIZE.x) + TILE_SIZE.x / 2;
 	auto y = ((int)(pos.y / TILE_SIZE.y) * TILE_SIZE.y) + TILE_SIZE.y / 2;
 	//update x, y based on the view
-	x = mEngine->Window().mapPixelToCoords(sf::Vector2i(x, y)).x;
-	y = mEngine->Window().mapPixelToCoords(sf::Vector2i(x, y)).y;
+	x = mEngine->Window().mapPixelToCoords(sf::Vector2i((int)x, (int)y)).x;
+	y = mEngine->Window().mapPixelToCoords(sf::Vector2i((int)x, (int)y)).y;
 
 	for (auto e : mEntities.getEntities())
 	{
@@ -843,7 +848,7 @@ void PlayGame::Update(sf::Clock deltaClock)
 {
 	mEntities.update();
 	deltaClock.restart();
-	mWorld->Step(1.0f / 6000.0f, 8, 3);
+	mWorld->Step(1.0f / 60, 8, 3);
 }
 void PlayGame::Render()
 {
@@ -861,7 +866,6 @@ void PlayGame::Render()
 			//set the transform position to the body position
 			t.position.x = body_pos.x * SCALE;
 			t.position.y = body_pos.y * SCALE;
-			std::cout << t.position.x << ", " << t.position.y << std::endl;
 		}
 		if (e->hasComponent<CAnimation>())
 		{

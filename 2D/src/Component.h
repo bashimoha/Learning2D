@@ -2,9 +2,8 @@
 
 #include "Common.h"
 #include "Animation.h"
+#include <box2d.h>
 
-class b2Body;
-class b2Fixture;
 class Component
 {
 public:
@@ -49,8 +48,14 @@ class CBoundingBox :public Component
 public:
 	vec2 size{};
 	bool collidable{ false };
-	CBoundingBox(float w, float h) :size(w, h) {}
-	CBoundingBox(const vec2& _size) :size(_size) {}
+	b2AABB aabb{};
+	CBoundingBox(float w, float h) :size(w, h) {
+		aabb.lowerBound = b2Vec2(0.f, 0.f);
+		aabb.upperBound = b2Vec2(w, h);
+	}
+	CBoundingBox(const vec2& _size) {
+		CBoundingBox( _size.x, _size.y);
+	}
 	CBoundingBox() = default;
 };
 class CAnimation :public Component
@@ -82,6 +87,10 @@ class CRigidBody : public Component
 {
 public:
 	CRigidBody() = default;
+	CRigidBody(b2Body* _body)
+	{
+		body = _body;
+	}
 	b2Body* body{ nullptr };
 	b2Fixture* fixture{ nullptr };
 };

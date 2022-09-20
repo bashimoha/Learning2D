@@ -17,7 +17,7 @@ public:
 	void Render();
 	void  DoAction(const Action&);
 private:
-	void DrawGrid();
+	void DrawGrid(sf::RenderWindow& target);
 	void DrawSelectableTexture();
 	void CreateSelectedEntity(const std::string& name, const vec2&, bool primitive = false);
 	void PlaceEntityBasedOnMouse(const vec2& pos);

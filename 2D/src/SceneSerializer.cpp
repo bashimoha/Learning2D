@@ -301,11 +301,11 @@ bool SceneSerializer::Deserialize(std::string filepath)
 				auto type = rbc["Type"].as<int>();
 				switch (type)
 				{
-				case 0: bodyDef.type = b2_dynamicBody; break;
+				case 1: bodyDef.type = b2_dynamicBody; break;
 
-				case 1: bodyDef.type = b2_staticBody; break;
+				case 2: bodyDef.type = b2_staticBody; break;
 
-				case 2:bodyDef.type = b2_kinematicBody; break;
+				case 3:bodyDef.type = b2_kinematicBody; break;
 				}
 				auto p = rbc["Position"].as<vec2>();
 				auto& rb = e->addComponent<CRigidBody>();
